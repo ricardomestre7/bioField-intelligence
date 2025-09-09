@@ -1,0 +1,82 @@
+{
+  "name": "RegenerativePlatform",
+  "displayName": "Super App Regenerativo",
+  "version": "1.0.0",
+  "versionCode": 1,
+  "description": "Plataforma móvel regenerativa com IA, Blockchain, IoT, AR e sustentabilidade",
+  "orientation": "portrait",
+  "icon": "./assets/icon.png",
+  "splash": {
+    "image": "./assets/splash.png",
+    "resizeMode": "contain",
+    "backgroundColor": "#2E7D32"
+  },
+  "updates": {
+    "fallbackToCacheTimeout": 0
+  },
+  "assetBundlePatterns": [
+    "**/*"
+  ],
+  "ios": {
+    "supportsTablet": true,
+    "bundleIdentifier": "com.regenerativeplatform.superapp",
+    "buildNumber": "1.0.0",
+    "infoPlist": {
+      "NSCameraUsageDescription": "Este app usa a câmera para capturar dados ambientais e experiências AR",
+      "NSMicrophoneUsageDescription": "Este app usa o microfone para comunicação por voz e análise de ruído ambiental",
+      "NSLocationWhenInUseUsageDescription": "Este app usa localização para monitoramento ambiental e serviços baseados em localização",
+      "NSLocationAlwaysAndWhenInUseUsageDescription": "Este app usa localização para monitoramento contínuo de dados ambientais",
+      "NSPhotoLibraryUsageDescription": "Este app acessa a galeria para compartilhar fotos relacionadas à sustentabilidade",
+      "NSBluetoothAlwaysUsageDescription": "Este app usa Bluetooth para conectar com sensores IoT e dispositivos sustentáveis",
+      "NSFaceIDUsageDescription": "Este app usa Face ID para autenticação segura",
+      "NSContactsUsageDescription": "Este app acessa contatos para facilitar colaboração em projetos sustentáveis",
+      "NSCalendarsUsageDescription": "Este app acessa o calendário para agendar atividades sustentáveis",
+      "NSRemindersUsageDescription": "Este app acessa lembretes para metas de sustentabilidade",
+      "NSMotionUsageDescription": "Este app usa sensores de movimento para rastrear atividades sustentáveis",
+      "NSHealthShareUsageDescription": "Este app compartilha dados de saúde relacionados ao bem-estar ambiental",
+      "NSHealthUpdateUsageDescription": "Este app atualiza dados de saúde com métricas ambientais"
+    }
+  },
+  "android": {
+    "adaptiveIcon": {
+      "foregroundImage": "./assets/adaptive-icon.png",
+      "backgroundColor": "#2E7D32"
+    },
+    "package": "com.regenerativeplatform.superapp",
+    "versionCode": 1,
+    "permissions": [
+      "CAMERA",
+      "RECORD_AUDIO",
+      "ACCESS_FINE_LOCATION",
+      "ACCESS_COARSE_LOCATION",
+      "ACCESS_BACKGROUND_LOCATION",
+      "READ_EXTERNAL_STORAGE",
+      "WRITE_EXTERNAL_STORAGE",
+      "BLUETOOTH",
+      "BLUETOOTH_ADMIN",
+      "ACCESS_NETWORK_STATE",
+      "INTERNET",
+      "VIBRATE",
+      "WAKE_LOCK",
+      "RECEIVE_BOOT_COMPLETED",
+      "USE_FINGERPRINT",
+      "USE_BIOMETRIC",
+      "NFC",
+      "READ_CONTACTS",
+      "WRITE_CONTACTS",
+      "READ_CALENDAR",
+      "WRITE_CALENDAR",
+      "BODY_SENSORS",
+      "ACTIVITY_RECOGNITION",
+      "FOREGROUND_SERVICE",
+      "SYSTEM_ALERT_WINDOW"
+    ]
+  },
+  "web": {
+    "favicon": "./assets/favicon.png"
+  },
+  "scheme": "regenerativeapp",
+  "privacy": "public",
+  "platforms": ["ios", "android", "web"],
+  "githubUrl": "https://github.com/regenerative-platform/mobile"
+}
