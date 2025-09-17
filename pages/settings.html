@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Configurações - BioField Intelligence</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="header">
+            <div class="logo">
+                <i class="fas fa-atom"></i>
+                <h1>BioField Intelligence</h1>
+            </div>
+            <nav class="nav">
+                <a href="dashboard.html" class="nav-link">Dashboard</a>
+                <a href="evaluation.html" class="nav-link">Avaliações</a>
+                <a href="reports.html" class="nav-link">Relatórios</a>
+                <a href="organization.html" class="nav-link">Organização</a>
+                <a href="settings.html" class="nav-link active">Configurações</a>
+            </nav>
+            <div class="user-profile">
+                <i class="fas fa-user-circle"></i>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Settings Section -->
+            <section class="section active">
+                <div class="section-header">
+                    <h2>⚙️ Configurações</h2>
+                    <p>Configurações do sistema e preferências do usuário</p>
+                </div>
+                
+                <div class="settings-container">
+                    <div class="settings-section">
+                        <h3><i class="fas fa-user-cog"></i> Perfil do Usuário</h3>
+                        <div class="settings-form">
+                            <div class="form-group">
+                                <label for="user-name">Nome:</label>
+                                <input type="text" id="user-name" value="Consultor BioField" readonly>
+                            </div>
+                            <div class="form-group">
+                                <label for="user-email">Email:</label>
+                                <input type="email" id="user-email" value="consultor@biofield.com" readonly>
+                            </div>
+                            <div class="form-group">
+                                <label for="user-role">Função:</label>
+                                <select id="user-role">
+                                    <option value="consultor" selected>Consultor</option>
+                                    <option value="admin">Administrador</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="settings-section">
+                        <h3><i class="fas fa-cog"></i> Configurações do Sistema</h3>
+                        <div class="settings-options">
+                            <div class="setting-item">
+                                <label>
+                                    <input type="checkbox" checked>
+                                    Notificações por email
+                                </label>
+                            </div>
+                            <div class="setting-item">
+                                <label>
+                                    <input type="checkbox" checked>
+                                    Atualizações automáticas
+                                </label>
+                            </div>
+                            <div class="setting-item">
+                                <label>
+                                    <input type="checkbox">
+                                    Modo escuro
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="settings-section">
+                        <h3><i class="fas fa-database"></i> Dados e Backup</h3>
+                        <div class="backup-actions">
+                            <button class="btn-primary" onclick="exportData()">
+                                <i class="fas fa-download"></i> Exportar Dados
+                            </button>
+                            <button class="btn-secondary" onclick="clearData()">
+                                <i class="fas fa-trash"></i> Limpar Dados Locais
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="settings-section">
+                        <h3><i class="fas fa-info-circle"></i> Sobre o Sistema</h3>
+                        <div class="system-info">
+                            <div class="info-item">
+                                <label>Versão:</label>
+                                <span>1.0.0</span>
+                            </div>
+                            <div class="info-item">
+                                <label>Última Atualização:</label>
+                                <span>15 de Janeiro de 2025</span>
+                            </div>
+                            <div class="info-item">
+                                <label>Desenvolvedor:</label>
+                                <span>BioField Intelligence Team</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="../script.js"></script>
+    <script>
+        // Settings page specific functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            // Load user settings
+            loadUserSettings();
+        });
+
+        function loadUserSettings() {
+            // Load settings from localStorage
+            const settings = JSON.parse(localStorage.getItem('biofield-settings') || '{}');
+            
+            // Apply settings
+            if (settings.notifications !== undefined) {
+                document.querySelector('input[type="checkbox"]').checked = settings.notifications;
+            }
+            if (settings.autoUpdate !== undefined) {
+                document.querySelectorAll('input[type="checkbox"]')[1].checked = settings.autoUpdate;
+            }
+            if (settings.darkMode !== undefined) {
+                document.querySelectorAll('input[type="checkbox"]')[2].checked = settings.darkMode;
+            }
+        }
+
+        function clearData() {
+            if (confirm('Tem certeza que deseja limpar todos os dados locais? Esta ação não pode ser desfeita.')) {
+                localStorage.removeItem('biofield-evaluations');
+                localStorage.removeItem('biofield-settings');
+                alert('Dados locais limpos com sucesso!');
+                location.reload();
+            }
+        }
+
+        // Save settings on change
+        document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+            checkbox.addEventListener('change', function() {
+                const settings = {
+                    notifications: document.querySelectorAll('input[type="checkbox"]')[0].checked,
+                    autoUpdate: document.querySelectorAll('input[type="checkbox"]')[1].checked,
+                    darkMode: document.querySelectorAll('input[type="checkbox"]')[2].checked
+                };
+                localStorage.setItem('biofield-settings', JSON.stringify(settings));
+            });
+        });
+    </script>
+</body>
+</html>
