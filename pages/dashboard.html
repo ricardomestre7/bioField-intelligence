@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - BioField Intelligence</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="header">
+            <div class="logo">
+                <i class="fas fa-atom"></i>
+                <h1>BioField Intelligence</h1>
+            </div>
+            <nav class="nav">
+                <a href="dashboard.html" class="nav-link active">Dashboard</a>
+                <a href="evaluation.html" class="nav-link">Avaliações</a>
+                <a href="reports.html" class="nav-link">Relatórios</a>
+                <a href="organization.html" class="nav-link">Organização</a>
+                <a href="settings.html" class="nav-link">Configurações</a>
+            </nav>
+            <div class="user-profile">
+                <i class="fas fa-user-circle"></i>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Dashboard Section -->
+            <section class="section active">
+                <div class="section-header">
+                    <h2>🧬 BioField Intelligence</h2>
+                    <p>Análise bioenergética e regeneração de ambientes físicos em tempo real</p>
+                    <div class="dashboard-stats">
+                        <span class="stat-item"><i class="fas fa-clock"></i> Atualizado há 2 min</span>
+                        <span class="stat-item"><i class="fas fa-map-marker-alt"></i> 4 locais monitorados</span>
+                        <span class="stat-item"><i class="fas fa-brain"></i> Análise bioenergética ativa</span>
+                    </div>
+                </div>
+                
+                <!-- Enhanced KPI Grid -->
+                <div class="dashboard-grid">
+                    <div class="kpi-card featured">
+                        <div class="kpi-icon">
+                            <i class="fas fa-atom"></i>
+                        </div>
+                        <div class="kpi-content">
+                            <h3>Índice Bioenergético Médio</h3>
+                            <div class="kpi-value">71.5</div>
+                            <div class="kpi-trend positive">+5.2% esta semana</div>
+                            <div class="kpi-details">
+                                <small>Meta: 80+ para ambientes otimizados</small>
+                                <div class="progress-mini">
+                                    <div class="progress-fill" style="width: 71.5%"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="kpi-card">
+                        <div class="kpi-icon">
+                            <i class="fas fa-wave-square"></i>
+                        </div>
+                        <div class="kpi-content">
+                            <h3>Coerência Vibracional</h3>
+                            <div class="kpi-value">64.8</div>
+                            <div class="kpi-trend positive">+8.1% esta semana</div>
+                            <div class="kpi-details">
+                                <small>Harmonia energética dos ambientes</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="kpi-card">
+                        <div class="kpi-icon">
+                            <i class="fas fa-info-circle"></i>
+                        </div>
+                        <div class="kpi-content">
+                            <h3>Qualidade Informacional</h3>
+                            <div class="kpi-value">75%</div>
+                            <div class="kpi-trend positive">Alta em 2 locais</div>
+                            <div class="kpi-details">
+                                <small>Clareza energética dos ambientes</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="kpi-card">
+                        <div class="kpi-icon">
+                            <i class="fas fa-wifi"></i>
+                        </div>
+                        <div class="kpi-content">
+                            <h3>Ruído Eletromagnético</h3>
+                            <div class="kpi-value">Moderado</div>
+                            <div class="kpi-trend negative">1 local com alta interferência</div>
+                            <div class="kpi-details">
+                                <small>Necessita intervenção na Sala Técnica</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Locations Overview -->
+                <div class="locations-overview">
+                    <h3><i class="fas fa-map-marker-alt"></i> Visão Geral dos Locais</h3>
+                    <div class="locations-grid">
+                        <div class="location-card">
+                            <div class="location-header">
+                                <h4>Recepção</h4>
+                                <span class="location-status active">Ativo</span>
+                            </div>
+                            <div class="location-metrics">
+                                <div class="metric">
+                                    <span class="metric-label">Bio Index:</span>
+                                    <span class="metric-value">74</span>
+                                </div>
+                                <div class="metric">
+                                    <span class="metric-label">Coerência:</span>
+                                    <span class="metric-value">68</span>
+                                </div>
+                                <div class="metric">
+                                    <span class="metric-label">Última Avaliação:</span>
+                                    <span class="metric-value">10/01/2025</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="location-card">
+                            <div class="location-header">
+                                <h4>Sala Técnica</h4>
+                                <span class="location-status warning">Atenção</span>
+                            </div>
+                            <div class="location-metrics">
+                                <div class="metric">
+                                    <span class="metric-label">Bio Index:</span>
+                                    <span class="metric-value">58</span>
+                                </div>
+                                <div class="metric">
+                                    <span class="metric-label">Coerência:</span>
+                                    <span class="metric-value">44</span>
+                                </div>
+                                <div class="metric">
+                                    <span class="metric-label">Última Avaliação:</span>
+                                    <span class="metric-value">12/01/2025</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="location-card">
+                            <div class="location-header">
+                                <h4>Sala de Meditação</h4>
+                                <span class="location-status excellent">Excelente</span>
+                            </div>
+                            <div class="location-metrics">
+                                <div class="metric">
+                                    <span class="metric-label">Bio Index:</span>
+                                    <span class="metric-value">89</span>
+                                </div>
+                                <div class="metric">
+                                    <span class="metric-label">Coerência:</span>
+                                    <span class="metric-value">92</span>
+                                </div>
+                                <div class="metric">
+                                    <span class="metric-label">Última Avaliação:</span>
+                                    <span class="metric-value">08/01/2025</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="location-card">
+                            <div class="location-header">
+                                <h4>Cozinha</h4>
+                                <span class="location-status active">Ativo</span>
+                            </div>
+                            <div class="location-metrics">
+                                <div class="metric">
+                                    <span class="metric-label">Bio Index:</span>
+                                    <span class="metric-value">65</span>
+                                </div>
+                                <div class="metric">
+                                    <span class="metric-label">Coerência:</span>
+                                    <span class="metric-value">55</span>
+                                </div>
+                                <div class="metric">
+                                    <span class="metric-label">Última Avaliação:</span>
+                                    <span class="metric-value">05/01/2025</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Actions -->
+                <div class="quick-actions">
+                    <h3><i class="fas fa-bolt"></i> Ações Rápidas</h3>
+                    <div class="actions-grid">
+                        <a href="evaluation.html" class="action-card">
+                            <i class="fas fa-plus-circle"></i>
+                            <h4>Nova Avaliação</h4>
+                            <p>Registrar avaliação bioenergética</p>
+                        </a>
+                        <a href="reports.html" class="action-card">
+                            <i class="fas fa-chart-line"></i>
+                            <h4>Ver Relatórios</h4>
+                            <p>Análise detalhada dos dados</p>
+                        </a>
+                        <a href="organization.html" class="action-card">
+                            <i class="fas fa-building"></i>
+                            <h4>Gerenciar Locais</h4>
+                            <p>Administrar ambientes</p>
+                        </a>
+                        <a href="#" class="action-card" onclick="exportData()">
+                            <i class="fas fa-download"></i>
+                            <h4>Exportar Dados</h4>
+                            <p>Baixar informações</p>
+                        </a>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="../script.js"></script>
+    <script>
+        // Dashboard specific functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            // Update dashboard with real-time data
+            if (window.bioFieldManager) {
+                window.bioFieldManager.updateDashboardWithBioFieldData();
+            }
+            
+            // Add real-time updates
+            setInterval(() => {
+                updateDashboardMetrics();
+            }, 5000);
+        });
+
+        function updateDashboardMetrics() {
+            // Simulate real-time updates
+            const bioIndex = document.querySelector('.kpi-card.featured .kpi-value');
+            if (bioIndex) {
+                const currentValue = parseFloat(bioIndex.textContent);
+                const newValue = Math.max(65, Math.min(85, currentValue + (Math.random() - 0.5) * 0.5));
+                bioIndex.textContent = newValue.toFixed(1);
+            }
+        }
+    </script>
+</body>
+</html>

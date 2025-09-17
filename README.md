@@ -1,128 +1,236 @@
-# 🌱 Plataforma Regenerativa - Super App
+# 🧬 BioField Intelligence
 
-Uma plataforma completa para monitoramento e gestão de práticas regenerativas, integrando tecnologias avançadas como IA, Blockchain, IoT, AR e muito mais.
+Plataforma de análise e regeneração bioenergética de ambientes físicos.
 
-## 🚀 Funcionalidades
+## 🎯 Objetivo
 
-### 🎯 Core Features
-- **Dashboard Preditivo** com gêmeo digital
-- **Engine de Métricas Multidimensionais** com IA
-- **Sistema Blockchain** de certificação
-- **PWA (Progressive Web App)** com offline-first
-- **App Mobile Nativo** (React Native)
-
-### 🤖 Tecnologias Avançadas
-- **Inteligência Artificial** para análise preditiva
-- **Realidade Aumentada (AR)** para visualização
-- **Internet das Coisas (IoT)** e sensores
-- **Chat Inteligente** com assistente IA
-- **Sistema de Gamificação** e recompensas
-
-### 🔗 Integrações
-- **Blockchain** e certificação digital
-- **Pagamentos Digitais** e DeFi
-- **Marketplace** de soluções regenerativas
-- **Colaboração** em tempo real
-- **Notificações Push** inteligentes
+Desenvolver um aplicativo web moderno para:
+- Registrar avaliações bioenergéticas de ambientes físicos
+- Exibir dashboard de métricas regenerativas
+- Gerar relatórios por local analisado
+- Salvar dados em tempo real no Firebase
+- Preparar estrutura para futuras certificações
 
 ## 🛠️ Tecnologias Utilizadas
 
-### Frontend
-- HTML5, CSS3, JavaScript (ES6+)
-- Progressive Web App (PWA)
-- Service Workers
-- Web APIs (Geolocation, Camera, etc.)
+| Camada | Tecnologia |
+|--------|------------|
+| Framework principal | HTML5 + CSS3 + JavaScript ES6+ |
+| Estilo | CSS Custom Properties + Grid/Flexbox |
+| Interatividade | Vanilla JavaScript |
+| Gráficos | Chart.js |
+| Backend / DB / Auth | Firebase Firestore |
+| Deploy | Vercel |
+| Dados mock (fase 1) | JSON local |
 
-### Mobile
-- React Native
-- TypeScript
-- React Navigation
-- Reanimated
-- Expo
-
-### Backend & Integrações
-- Firebase (Auth, Firestore, Storage)
-- Web3.js (Blockchain)
-- TensorFlow.js (IA/ML)
-- WebRTC (Colaboração)
-- Push Notifications
-
-## 🎨 Features de UI/UX
-- **Dark Mode** e temas personalizáveis
-- **Design Responsivo** para todos os dispositivos
-- **Animações Fluidas** e micro-interações
-- **Acessibilidade** completa
-- **Offline-First** com sincronização automática
-
-## 📱 Estrutura do Projeto
+## 📁 Estrutura do Projeto
 
 ```
+bioField-Intelligence/
 ├── index.html              # Página principal
-├── manifest.json           # PWA manifest
-├── sw.js                   # Service Worker
-├── script.js               # Lógica principal
-├── styles.css              # Estilos globais
-├── src/                    # Código fonte modular
-│   ├── core/              # Plataforma base
-│   ├── modules/           # Módulos funcionais
-│   ├── components/        # Componentes UI
-│   ├── config/            # Configurações
-│   └── utils/             # Utilitários
-└── mobile/                # App React Native
-    ├── src/
-    │   ├── screens/       # Telas do app
-    │   ├── components/    # Componentes mobile
-    │   └── contexts/      # Contextos React
-    └── package.json       # Dependências mobile
+├── script.js              # Lógica JavaScript
+├── styles.css             # Estilos CSS
+├── manifest.json          # PWA Manifest
+├── sw.js                  # Service Worker
+├── vercel.json            # Configuração Vercel
+├── firebase-config.js     # Configuração Firebase
+├── public/
+│   └── mock/
+│       └── sampleData.json # Dados de exemplo
+└── README.md              # Este arquivo
+```
+
+## 🚀 Funcionalidades Implementadas
+
+### ✅ Dashboard
+- Métricas bioenergéticas em tempo real
+- Índice Bioenergético Médio
+- Coerência Vibracional
+- Qualidade Informacional
+- Ruído Eletromagnético
+
+### ✅ Avaliações
+- Formulário completo de avaliação bioenergética
+- Indicadores visuais de range
+- Histórico de avaliações
+- Salvamento local e Firebase
+
+### ✅ Relatórios
+- Gráficos interativos com Chart.js
+- Evolução temporal dos índices
+- Comparação entre locais
+- Exportação de dados
+
+### ✅ Organização
+- Gestão de locais
+- Status dos ambientes
+- Certificações disponíveis
+- Informações da organização
+
+### ✅ Configurações
+- Perfil do usuário
+- Configurações do sistema
+- Preferências de notificação
+
+## 🔥 Firebase Integration
+
+### Estrutura do Banco de Dados
+
+```javascript
+// Coleções Firebase
+users: {
+  id: string,
+  email: string,
+  role: 'consultor' | 'admin',
+  created_at: timestamp
+}
+
+organizations: {
+  id: string,
+  name: string,
+  location: string,
+  industry: string,
+  created_by: string,
+  created_at: timestamp
+}
+
+locations: {
+  id: string,
+  organization_id: string,
+  name: string,
+  category: string,
+  status: 'ativo' | 'inativo',
+  created_at: timestamp
+}
+
+biofield_logs: {
+  id: string,
+  location_id: string,
+  date: string,
+  bio_index: number,
+  vibrational_coherence: number,
+  info_quality: 'Alta' | 'Média' | 'Baixa',
+  em_noise: 'Baixa' | 'Moderada' | 'Alta',
+  notes: string,
+  created_by: string,
+  created_at: timestamp
+}
 ```
 
 ## 🚀 Como Executar
 
-### Web App
-1. Clone o repositório
-2. Abra `index.html` em um servidor local
-3. Ou use: `python -m http.server 8000`
-4. Acesse: `http://localhost:8000`
+### Desenvolvimento Local
 
-### Mobile App
-1. Entre na pasta `mobile/`
-2. Execute: `npm install`
-3. Para iOS: `npx react-native run-ios`
-4. Para Android: `npx react-native run-android`
+```bash
+# Instalar dependências
+npm install
 
-## 🌍 Deploy
+# Executar servidor de desenvolvimento
+npm run dev
 
-### Vercel (Recomendado)
-1. Conecte o repositório GitHub
-2. Deploy automático a cada push
-3. URL personalizada disponível
+# Acessar no navegador
+http://localhost:8000
+```
 
-### Outras Opções
-- Netlify
-- GitHub Pages
-- Firebase Hosting
+### Deploy no Vercel
 
-## 🤝 Contribuição
+```bash
+# Instalar Vercel CLI
+npm i -g vercel
 
-1. Fork o projeto
-2. Crie uma branch: `git checkout -b feature/nova-funcionalidade`
-3. Commit: `git commit -m 'Adiciona nova funcionalidade'`
-4. Push: `git push origin feature/nova-funcionalidade`
-5. Abra um Pull Request
+# Fazer deploy
+vercel --prod
+```
+
+## 🔧 Configuração Firebase
+
+1. Crie um projeto no [Firebase Console](https://console.firebase.google.com)
+2. Ative o Firestore Database
+3. Configure as regras de segurança
+4. Substitua as credenciais em `firebase-config.js`
+
+```javascript
+const firebaseConfig = {
+  apiKey: "sua-api-key",
+  authDomain: "seu-projeto.firebaseapp.com",
+  projectId: "seu-projeto-id",
+  storageBucket: "seu-projeto.appspot.com",
+  messagingSenderId: "123456789",
+  appId: "seu-app-id"
+};
+```
+
+## 📊 Dados Mock
+
+O projeto inclui dados de exemplo em `public/mock/sampleData.json`:
+
+```json
+{
+  "organization": {
+    "name": "Espaço Vida Leve",
+    "location": "São Paulo, SP",
+    "industry": "Bem-estar e Saúde"
+  },
+  "locations": [
+    {
+      "name": "Recepção",
+      "bio_index": 74,
+      "vibrational_coherence": 68,
+      "info_quality": "Alta",
+      "em_noise": "Moderada"
+    }
+  ]
+}
+```
+
+## 🎨 Design System
+
+### Cores Principais
+- **Primária**: #22c55e (Verde)
+- **Secundária**: #16a34a (Verde escuro)
+- **Background**: #0f172a (Azul escuro)
+- **Surface**: #1e293b (Cinza escuro)
+- **Text**: #f8fafc (Branco)
+
+### Tipografia
+- **Fonte**: Inter, Segoe UI, system fonts
+- **Tamanhos**: 0.8rem - 2.5rem
+- **Pesos**: 400, 600, 800
+
+## 📱 Responsividade
+
+O projeto é totalmente responsivo com breakpoints:
+- **Mobile**: < 768px
+- **Tablet**: 768px - 1024px
+- **Desktop**: > 1024px
+
+## 🔮 Próximas Funcionalidades
+
+- [ ] Autenticação com Firebase Auth
+- [ ] Geração de relatórios PDF
+- [ ] Certificados digitais
+- [ ] IA para recomendação de intervenções
+- [ ] Notificações push
+- [ ] Modo offline com Service Worker
 
 ## 📄 Licença
 
-Este projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para mais detalhes.
+MIT License - veja o arquivo LICENSE para detalhes.
 
-## 🌟 Roadmap
+## 👥 Contribuição
 
-- [ ] Integração com mais blockchains
-- [ ] Suporte a VR (Realidade Virtual)
-- [ ] IA mais avançada com GPT
-- [ ] Marketplace descentralizado
-- [ ] Integração com satélites
-- [ ] Análise de carbono em tempo real
+1. Fork o projeto
+2. Crie uma branch para sua feature
+3. Commit suas mudanças
+4. Push para a branch
+5. Abra um Pull Request
+
+## 📞 Suporte
+
+Para suporte, entre em contato:
+- Email: suporte@biofield.com
+- GitHub Issues: [Abrir issue](https://github.com/seu-usuario/biofield-intelligence/issues)
 
 ---
 
-**Desenvolvido com 💚 para um futuro mais sustentável**
+Desenvolvido com ❤️ para regeneração energética de ambientes.

@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Avaliações - BioField Intelligence</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="header">
+            <div class="logo">
+                <i class="fas fa-atom"></i>
+                <h1>BioField Intelligence</h1>
+            </div>
+            <nav class="nav">
+                <a href="dashboard.html" class="nav-link">Dashboard</a>
+                <a href="evaluation.html" class="nav-link active">Avaliações</a>
+                <a href="reports.html" class="nav-link">Relatórios</a>
+                <a href="organization.html" class="nav-link">Organização</a>
+                <a href="settings.html" class="nav-link">Configurações</a>
+            </nav>
+            <div class="user-profile">
+                <i class="fas fa-user-circle"></i>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Evaluation Section -->
+            <section class="section active">
+                <div class="section-header">
+                    <h2>📝 Registro de Avaliações Bioenergéticas</h2>
+                    <p>Registre avaliações de ambientes físicos para análise e regeneração energética</p>
+                </div>
+                
+                <div class="evaluation-container">
+                    <div class="evaluation-form-container">
+                        <form id="biofield-evaluation-form" class="evaluation-form">
+                            <div class="form-group">
+                                <label for="location">Local Avaliado</label>
+                                <select id="location" name="location" required>
+                                    <option value="">Selecione um local</option>
+                                    <option value="recepcao">Recepção</option>
+                                    <option value="sala-tecnica">Sala Técnica</option>
+                                    <option value="sala-meditacao">Sala de Meditação</option>
+                                    <option value="cozinha">Cozinha</option>
+                                    <option value="novo">Novo Local</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="bio-index">Índice Bioenergético (0-100)</label>
+                                <input type="number" id="bio-index" name="bio-index" min="0" max="100" required>
+                                <div class="range-indicator">
+                                    <span class="range-label">Baixo</span>
+                                    <div class="range-bar">
+                                        <div class="range-fill" id="bio-index-fill"></div>
+                                    </div>
+                                    <span class="range-label">Alto</span>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="vibrational-coherence">Coerência Vibracional (0-100)</label>
+                                <input type="number" id="vibrational-coherence" name="vibrational-coherence" min="0" max="100" required>
+                                <div class="range-indicator">
+                                    <span class="range-label">Baixo</span>
+                                    <div class="range-bar">
+                                        <div class="range-fill" id="coherence-fill"></div>
+                                    </div>
+                                    <span class="range-label">Alto</span>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="info-quality">Qualidade Informacional</label>
+                                <select id="info-quality" name="info-quality" required>
+                                    <option value="">Selecione a qualidade</option>
+                                    <option value="Alta">Alta</option>
+                                    <option value="Média">Média</option>
+                                    <option value="Baixa">Baixa</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="em-noise">Ruído Eletromagnético</label>
+                                <select id="em-noise" name="em-noise" required>
+                                    <option value="">Selecione o nível</option>
+                                    <option value="Baixa">Baixa</option>
+                                    <option value="Moderada">Moderada</option>
+                                    <option value="Alta">Alta</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="notes">Observações</label>
+                                <textarea id="notes" name="notes" rows="4" placeholder="Descreva detalhes sobre o ambiente, intervenções realizadas, etc."></textarea>
+                            </div>
+                            
+                            <div class="form-actions">
+                                <button type="submit" class="btn-primary">
+                                    <i class="fas fa-save"></i> Salvar Avaliação
+                                </button>
+                                <button type="button" class="btn-secondary" onclick="clearForm()">
+                                    <i class="fas fa-eraser"></i> Limpar
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                    
+                    <div class="evaluation-history">
+                        <h3>Histórico de Avaliações</h3>
+                        <div id="evaluation-list" class="evaluation-list">
+                            <!-- Lista será populada dinamicamente -->
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="../script.js"></script>
+    <script>
+        // Evaluation page specific functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize BioField Manager if not already done
+            if (!window.bioFieldManager) {
+                window.bioFieldManager = new BioFieldManager();
+            }
+            
+            // Load existing evaluations
+            if (window.bioFieldManager) {
+                window.bioFieldManager.loadEvaluations();
+            }
+        });
+    </script>
+</body>
+</html>

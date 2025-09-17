@@ -1004,6 +1004,42 @@ class RegenPlatform {
         return html;
     }
 
+    initMarketplace() {
+        // Inicializar sistema de marketplace NFT
+        this.marketplace = {
+            products: [
+                {
+                    id: 'nft-001',
+                    name: 'Certificado Reflorestamento',
+                    price: 150,
+                    type: 'environmental',
+                    description: '100 árvores plantadas na Amazônia',
+                    impact: 'CO2 reduzido: 2.5 toneladas/ano'
+                },
+                {
+                    id: 'nft-002',
+                    name: 'Energia Solar Certificada',
+                    price: 200,
+                    type: 'energy',
+                    description: '1000 kWh de energia limpa gerada',
+                    impact: 'CO2 evitado: 0.8 toneladas'
+                },
+                {
+                    id: 'nft-003',
+                    name: 'Purificação de Água',
+                    price: 120,
+                    type: 'water',
+                    description: '5000 litros de água tratada',
+                    impact: 'Comunidades beneficiadas: 50 famílias'
+                }
+            ],
+            transactions: [],
+            totalVolume: 0
+        };
+        
+        console.log('🛒 Sistema de Marketplace NFT inicializado');
+    }
+
     updateMarketplace() {
         // Simular mudanças de preços no marketplace
         const priceElements = document.querySelectorAll('.product-price');
@@ -1429,9 +1465,654 @@ class RegenPlatform {
     }
 }
 
+// BioField Intelligence specific functionality
+class BioFieldManager {
+    constructor() {
+        this.sampleData = null;
+        this.evaluations = [];
+        this.firebaseReady = false;
+        this.init();
+    }
+
+    async init() {
+        await this.loadSampleData();
+        this.setupEvaluationForm();
+        this.loadEvaluations();
+        this.setupRangeIndicators();
+        this.initializeFirebase();
+    }
+
+    async initializeFirebase() {
+        // Wait for Firebase to be available
+        const checkFirebase = () => {
+            if (window.firebaseServices) {
+                this.firebaseReady = true;
+                console.log('🔥 Firebase ready for BioField Intelligence');
+                this.syncWithFirebase();
+            } else {
+                setTimeout(checkFirebase, 100);
+            }
+        };
+        checkFirebase();
+    }
+
+    async syncWithFirebase() {
+        if (!this.firebaseReady) return;
+        
+        try {
+            // Load evaluations from Firebase
+            await this.loadEvaluationsFromFirebase();
+            console.log('📊 Data synced with Firebase');
+        } catch (error) {
+            console.log('⚠️ Firebase not available, using local storage:', error.message);
+        }
+    }
+
+    async loadSampleData() {
+        try {
+            const response = await fetch('/mock/sampleData.json');
+            this.sampleData = await response.json();
+            this.updateDashboardWithBioFieldData();
+        } catch (error) {
+            console.error('Erro ao carregar dados mock:', error);
+        }
+    }
+
+    updateDashboardWithBioFieldData() {
+        if (!this.sampleData) return;
+
+        const metrics = this.sampleData.metrics_summary;
+        
+        // Update dashboard cards with BioField data
+        const bioIndexCard = document.querySelector('.kpi-card.featured .kpi-value');
+        if (bioIndexCard) {
+            bioIndexCard.textContent = metrics.average_bio_index;
+        }
+
+        const coherenceCard = document.querySelector('.kpi-card:nth-child(2) .kpi-value');
+        if (coherenceCard) {
+            coherenceCard.textContent = metrics.average_coherence;
+        }
+
+        const qualityCard = document.querySelector('.kpi-card:nth-child(3) .kpi-value');
+        if (qualityCard) {
+            const percentage = Math.round((metrics.high_quality_locations / metrics.total_locations) * 100);
+            qualityCard.textContent = percentage + '%';
+        }
+
+        const noiseCard = document.querySelector('.kpi-card:nth-child(4) .kpi-value');
+        if (noiseCard) {
+            const needsIntervention = metrics.locations_needing_intervention;
+            noiseCard.textContent = needsIntervention > 0 ? 'Moderado' : 'Baixo';
+        }
+    }
+
+    setupEvaluationForm() {
+        const form = document.getElementById('biofield-evaluation-form');
+        if (!form) return;
+
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            this.saveEvaluation();
+        });
+    }
+
+    setupRangeIndicators() {
+        const bioIndexInput = document.getElementById('bio-index');
+        const coherenceInput = document.getElementById('vibrational-coherence');
+
+        if (bioIndexInput) {
+            bioIndexInput.addEventListener('input', (e) => {
+                this.updateRangeIndicator('bio-index-fill', e.target.value);
+            });
+        }
+
+        if (coherenceInput) {
+            coherenceInput.addEventListener('input', (e) => {
+                this.updateRangeIndicator('coherence-fill', e.target.value);
+            });
+        }
+    }
+
+    updateRangeIndicator(elementId, value) {
+        const fill = document.getElementById(elementId);
+        if (fill) {
+            fill.style.width = value + '%';
+        }
+    }
+
+    async saveEvaluation() {
+        const form = document.getElementById('biofield-evaluation-form');
+        const formData = new FormData(form);
+        
+        const evaluation = {
+            id: 'eval-' + Date.now(),
+            location: formData.get('location'),
+            bio_index: parseInt(formData.get('bio-index')),
+            vibrational_coherence: parseInt(formData.get('vibrational-coherence')),
+            info_quality: formData.get('info-quality'),
+            em_noise: formData.get('em-noise'),
+            notes: formData.get('notes'),
+            date: new Date().toISOString().split('T')[0],
+            created_by: 'user-001',
+            created_at: new Date().toISOString()
+        };
+
+        this.evaluations.unshift(evaluation);
+        
+        // Save to Firebase if available, otherwise use localStorage
+        if (this.firebaseReady) {
+            await this.saveEvaluationToFirebase(evaluation);
+        } else {
+            this.saveEvaluationsToStorage();
+        }
+        
+        this.loadEvaluations();
+        this.showSuccessMessage();
+        form.reset();
+        this.updateRangeIndicator('bio-index-fill', 0);
+        this.updateRangeIndicator('coherence-fill', 0);
+    }
+
+    async saveEvaluationToFirebase(evaluation) {
+        try {
+            const { addDoc, collection } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js');
+            const db = window.firebaseDB;
+            
+            await addDoc(collection(db, 'biofield_logs'), {
+                location_id: evaluation.location,
+                date: evaluation.date,
+                bio_index: evaluation.bio_index,
+                vibrational_coherence: evaluation.vibrational_coherence,
+                info_quality: evaluation.info_quality,
+                em_noise: evaluation.em_noise,
+                notes: evaluation.notes,
+                created_by: evaluation.created_by,
+                created_at: evaluation.created_at
+            });
+            
+            console.log('✅ Evaluation saved to Firebase');
+        } catch (error) {
+            console.error('❌ Error saving to Firebase:', error);
+            // Fallback to localStorage
+            this.saveEvaluationsToStorage();
+        }
+    }
+
+    async loadEvaluationsFromFirebase() {
+        try {
+            const { getDocs, collection } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js');
+            const db = window.firebaseDB;
+            
+            const querySnapshot = await getDocs(collection(db, 'biofield_logs'));
+            this.evaluations = [];
+            
+            querySnapshot.forEach((doc) => {
+                const data = doc.data();
+                this.evaluations.push({
+                    id: doc.id,
+                    location: data.location_id,
+                    bio_index: data.bio_index,
+                    vibrational_coherence: data.vibrational_coherence,
+                    info_quality: data.info_quality,
+                    em_noise: data.em_noise,
+                    notes: data.notes,
+                    date: data.date,
+                    created_by: data.created_by,
+                    created_at: data.created_at
+                });
+            });
+            
+            // Sort by date (newest first)
+            this.evaluations.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+            
+            console.log('📊 Evaluations loaded from Firebase:', this.evaluations.length);
+        } catch (error) {
+            console.error('❌ Error loading from Firebase:', error);
+            // Fallback to localStorage
+            this.loadEvaluations();
+        }
+    }
+
+    saveEvaluationsToStorage() {
+        localStorage.setItem('biofield-evaluations', JSON.stringify(this.evaluations));
+    }
+
+    loadEvaluations() {
+        const stored = localStorage.getItem('biofield-evaluations');
+        if (stored) {
+            this.evaluations = JSON.parse(stored);
+        }
+        this.renderEvaluations();
+    }
+
+    renderEvaluations() {
+        const container = document.getElementById('evaluation-list');
+        if (!container) return;
+
+        if (this.evaluations.length === 0) {
+            container.innerHTML = '<p class="no-evaluations">Nenhuma avaliação registrada ainda.</p>';
+            return;
+        }
+
+        container.innerHTML = this.evaluations.map(eval => `
+            <div class="evaluation-item">
+                <h4>${this.getLocationName(eval.location)}</h4>
+                <div class="evaluation-metrics">
+                    <div class="evaluation-metric">
+                        <div class="label">Bio Index</div>
+                        <div class="value">${eval.bio_index}</div>
+                    </div>
+                    <div class="evaluation-metric">
+                        <div class="label">Coerência</div>
+                        <div class="value">${eval.vibrational_coherence}</div>
+                    </div>
+                    <div class="evaluation-metric">
+                        <div class="label">Qualidade</div>
+                        <div class="value">${eval.info_quality}</div>
+                    </div>
+                    <div class="evaluation-metric">
+                        <div class="label">Ruído EM</div>
+                        <div class="value">${eval.em_noise}</div>
+                    </div>
+                </div>
+                <div class="evaluation-date">${new Date(eval.date).toLocaleDateString('pt-BR')}</div>
+                ${eval.notes ? `<div class="evaluation-notes">${eval.notes}</div>` : ''}
+            </div>
+        `).join('');
+    }
+
+    getLocationName(locationKey) {
+        const locations = {
+            'recepcao': 'Recepção',
+            'sala-tecnica': 'Sala Técnica',
+            'sala-meditacao': 'Sala de Meditação',
+            'cozinha': 'Cozinha',
+            'novo': 'Novo Local'
+        };
+        return locations[locationKey] || locationKey;
+    }
+
+    showSuccessMessage() {
+        // Create a temporary success message
+        const message = document.createElement('div');
+        message.className = 'success-message';
+        message.innerHTML = '<i class="fas fa-check-circle"></i> Avaliação salva com sucesso!';
+        message.style.cssText = `
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: linear-gradient(45deg, #22c55e, #16a34a);
+            color: #0f172a;
+            padding: 1rem 1.5rem;
+            border-radius: 10px;
+            font-weight: 600;
+            z-index: 10000;
+            box-shadow: 0 5px 15px rgba(34, 197, 94, 0.4);
+            animation: slideIn 0.3s ease;
+        `;
+        
+        document.body.appendChild(message);
+        
+        setTimeout(() => {
+            message.remove();
+        }, 3000);
+    }
+}
+
+// Chart Manager for BioField Intelligence
+class ChartManager {
+    constructor() {
+        this.charts = {};
+        this.init();
+    }
+
+    init() {
+        // Wait for DOM to be ready
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', () => this.setupCharts());
+        } else {
+            this.setupCharts();
+        }
+    }
+
+    setupCharts() {
+        // Setup charts when reports section is active
+        this.setupChartListeners();
+    }
+
+    setupChartListeners() {
+        // Listen for section changes
+        const navLinks = document.querySelectorAll('.nav-link');
+        navLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                const targetSection = link.getAttribute('href').substring(1);
+                if (targetSection === 'reports') {
+                    setTimeout(() => this.createAllCharts(), 100);
+                }
+            });
+        });
+    }
+
+    createAllCharts() {
+        this.createBioIndexChart();
+        this.createCoherenceChart();
+        this.createQualityChart();
+        this.createNoiseChart();
+    }
+
+    createBioIndexChart() {
+        const ctx = document.getElementById('bioIndexChart');
+        if (!ctx) return;
+
+        // Destroy existing chart
+        if (this.charts.bioIndex) {
+            this.charts.bioIndex.destroy();
+        }
+
+        const data = this.generateBioIndexData();
+        
+        this.charts.bioIndex = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: data.labels,
+                datasets: [{
+                    label: 'Índice Bioenergético',
+                    data: data.values,
+                    borderColor: '#22c55e',
+                    backgroundColor: 'rgba(34, 197, 94, 0.1)',
+                    borderWidth: 3,
+                    fill: true,
+                    tension: 0.4,
+                    pointBackgroundColor: '#22c55e',
+                    pointBorderColor: '#16a34a',
+                    pointRadius: 6,
+                    pointHoverRadius: 8
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        labels: {
+                            color: '#cbd5e1'
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        ticks: {
+                            color: '#94a3b8'
+                        },
+                        grid: {
+                            color: 'rgba(148, 163, 184, 0.1)'
+                        }
+                    },
+                    y: {
+                        beginAtZero: true,
+                        max: 100,
+                        ticks: {
+                            color: '#94a3b8'
+                        },
+                        grid: {
+                            color: 'rgba(148, 163, 184, 0.1)'
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    createCoherenceChart() {
+        const ctx = document.getElementById('coherenceChart');
+        if (!ctx) return;
+
+        if (this.charts.coherence) {
+            this.charts.coherence.destroy();
+        }
+
+        const data = this.generateCoherenceData();
+        
+        this.charts.coherence = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: data.labels,
+                datasets: [{
+                    label: 'Coerência Vibracional',
+                    data: data.values,
+                    backgroundColor: [
+                        'rgba(34, 197, 94, 0.8)',
+                        'rgba(245, 158, 11, 0.8)',
+                        'rgba(34, 197, 94, 0.9)',
+                        'rgba(34, 197, 94, 0.7)'
+                    ],
+                    borderColor: [
+                        '#22c55e',
+                        '#f59e0b',
+                        '#16a34a',
+                        '#15803d'
+                    ],
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        labels: {
+                            color: '#cbd5e1'
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        ticks: {
+                            color: '#94a3b8'
+                        },
+                        grid: {
+                            color: 'rgba(148, 163, 184, 0.1)'
+                        }
+                    },
+                    y: {
+                        beginAtZero: true,
+                        max: 100,
+                        ticks: {
+                            color: '#94a3b8'
+                        },
+                        grid: {
+                            color: 'rgba(148, 163, 184, 0.1)'
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    createQualityChart() {
+        const ctx = document.getElementById('qualityChart');
+        if (!ctx) return;
+
+        if (this.charts.quality) {
+            this.charts.quality.destroy();
+        }
+
+        const data = this.generateQualityData();
+        
+        this.charts.quality = new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: data.labels,
+                datasets: [{
+                    data: data.values,
+                    backgroundColor: [
+                        'rgba(34, 197, 94, 0.8)',
+                        'rgba(245, 158, 11, 0.8)',
+                        'rgba(239, 68, 68, 0.8)'
+                    ],
+                    borderColor: [
+                        '#22c55e',
+                        '#f59e0b',
+                        '#ef4444'
+                    ],
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            color: '#cbd5e1',
+                            padding: 20
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    createNoiseChart() {
+        const ctx = document.getElementById('noiseChart');
+        if (!ctx) return;
+
+        if (this.charts.noise) {
+            this.charts.noise.destroy();
+        }
+
+        const data = this.generateNoiseData();
+        
+        this.charts.noise = new Chart(ctx, {
+            type: 'radar',
+            data: {
+                labels: data.labels,
+                datasets: [{
+                    label: 'Ruído Eletromagnético',
+                    data: data.values,
+                    borderColor: '#22c55e',
+                    backgroundColor: 'rgba(34, 197, 94, 0.2)',
+                    borderWidth: 2,
+                    pointBackgroundColor: '#22c55e',
+                    pointBorderColor: '#16a34a',
+                    pointRadius: 4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        labels: {
+                            color: '#cbd5e1'
+                        }
+                    }
+                },
+                scales: {
+                    r: {
+                        beginAtZero: true,
+                        max: 100,
+                        ticks: {
+                            color: '#94a3b8'
+                        },
+                        grid: {
+                            color: 'rgba(148, 163, 184, 0.1)'
+                        },
+                        pointLabels: {
+                            color: '#cbd5e1'
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    generateBioIndexData() {
+        // Generate sample data for the last 7 days
+        const labels = [];
+        const values = [];
+        const today = new Date();
+        
+        for (let i = 6; i >= 0; i--) {
+            const date = new Date(today);
+            date.setDate(date.getDate() - i);
+            labels.push(date.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' }));
+            values.push(Math.floor(Math.random() * 20) + 65); // Random between 65-85
+        }
+        
+        return { labels, values };
+    }
+
+    generateCoherenceData() {
+        return {
+            labels: ['Recepção', 'Sala Técnica', 'Sala de Meditação', 'Cozinha'],
+            values: [68, 44, 92, 55]
+        };
+    }
+
+    generateQualityData() {
+        return {
+            labels: ['Alta', 'Média', 'Baixa'],
+            values: [2, 1, 1] // Based on sample data
+        };
+    }
+
+    generateNoiseData() {
+        return {
+            labels: ['Recepção', 'Sala Técnica', 'Sala de Meditação', 'Cozinha'],
+            values: [40, 85, 20, 60] // Lower values = better (less noise)
+        };
+    }
+
+    refreshAllCharts() {
+        this.createAllCharts();
+    }
+}
+
+// Global functions for report actions
+function generateReport() {
+    alert('Funcionalidade de geração de PDF será implementada na próxima fase!');
+}
+
+function exportData() {
+    const data = {
+        timestamp: new Date().toISOString(),
+        evaluations: window.bioFieldManager ? window.bioFieldManager.evaluations : [],
+        sampleData: window.bioFieldManager ? window.bioFieldManager.sampleData : null
+    };
+    
+    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `biofield-data-${new Date().toISOString().split('T')[0]}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+}
+
+function refreshCharts() {
+    if (window.chartManager) {
+        window.chartManager.refreshAllCharts();
+    }
+}
+
+// Global function for clear form button
+function clearForm() {
+    const form = document.getElementById('biofield-evaluation-form');
+    if (form) {
+        form.reset();
+        document.getElementById('bio-index-fill').style.width = '0%';
+        document.getElementById('coherence-fill').style.width = '0%';
+    }
+}
+
 // Inicializar a plataforma quando o DOM estiver carregado
 document.addEventListener('DOMContentLoaded', () => {
     window.regenPlatform = new RegenPlatform();
+    window.bioFieldManager = new BioFieldManager();
+    window.chartManager = new ChartManager();
 });
 
 // Adicionar alguns utilitários globais
