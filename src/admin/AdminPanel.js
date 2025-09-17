@@ -409,22 +409,29 @@ class AdminPanel {
     async authenticate() {
         // Simulação de autenticação (em produção, usar Firebase Auth)
         const adminToken = localStorage.getItem('biofield_admin_token');
-        if (adminToken) {
+        const adminEmail = localStorage.getItem('biofield_admin_email');
+        if (adminToken && adminEmail) {
             this.isAuthenticated = true;
+            this.adminEmail = adminEmail;
             this.updateAuthStatus();
             this.loadPendingReadings();
         }
     }
 
     showLoginModal() {
+        const email = prompt('Digite o email de administrador:');
         const password = prompt('Digite a senha de administrador:');
-        if (password === 'biofield2024') { // Senha temporária
+        
+        if (email === 'institutodoreikiusui@gmail.com' && password === 'teste@123') {
             this.isAuthenticated = true;
+            this.adminEmail = email;
             localStorage.setItem('biofield_admin_token', 'admin_token_' + Date.now());
+            localStorage.setItem('biofield_admin_email', email);
             this.updateAuthStatus();
             this.loadPendingReadings();
+            console.log('✅ Login realizado com sucesso para:', email);
         } else {
-            alert('Senha incorreta!');
+            alert('Credenciais incorretas!');
         }
     }
 
@@ -434,7 +441,8 @@ class AdminPanel {
         const loginBtn = document.getElementById('login-btn');
 
         if (this.isAuthenticated) {
-            statusElement.textContent = 'Conectado';
+            const adminEmail = this.adminEmail || localStorage.getItem('biofield_admin_email') || 'Admin';
+            statusElement.textContent = `Conectado como ${adminEmail}`;
             statusElement.className = 'status-indicator connected';
             contentElement.style.display = 'block';
             loginBtn.style.display = 'none';

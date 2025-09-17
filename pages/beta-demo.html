@@ -96,6 +96,30 @@
             color: white;
         }
 
+        .widget-info, .admin-info {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(34, 197, 94, 0.2);
+        }
+
+        .widget-info p, .admin-info p {
+            margin: 5px 0;
+            color: #9ca3af;
+        }
+
+        .admin-info ul {
+            margin: 10px 0;
+            padding-left: 20px;
+        }
+
+        .admin-info li {
+            color: #9ca3af;
+            font-size: 14px;
+            margin: 5px 0;
+        }
+
         @media (max-width: 768px) {
             .demo-sections {
                 grid-template-columns: 1fr;
@@ -119,6 +143,10 @@
             <div class="demo-section">
                 <h2>📱 Widget de Leitura Vibracional</h2>
                 <p>Interface para coleta de dados bioenergéticos em tempo real</p>
+                <div class="widget-info">
+                    <p><strong>Email Admin:</strong> institutodoreikiusui@gmail.com</p>
+                    <p><strong>Status:</strong> <span class="status-badge status-active">Ativo</span></p>
+                </div>
                 <div id="vibrational-widget-container"></div>
             </div>
 
@@ -126,6 +154,13 @@
             <div class="demo-section">
                 <h2>🔐 Painel de Administração</h2>
                 <p>Controle de autorização e geração de relatórios</p>
+                <div class="admin-info">
+                    <p><strong>Credenciais:</strong></p>
+                    <ul>
+                        <li>Email: institutodoreikiusui@gmail.com</li>
+                        <li>Senha: teste@123</li>
+                    </ul>
+                </div>
                 <div id="admin-panel-container"></div>
             </div>
         </div>
@@ -183,7 +218,8 @@
                 <div>
                     <h4 style="color: #22c55e; margin-bottom: 10px;">2. Painel Admin</h4>
                     <ul style="color: #9ca3af; font-size: 14px; line-height: 1.6;">
-                        <li>Faça login (senha: biofield2024)</li>
+                        <li>Faça login (email: institutodoreikiusui@gmail.com)</li>
+                        <li>Senha: teste@123</li>
                         <li>Visualize leituras pendentes</li>
                         <li>Aprove ou rejeite leituras</li>
                         <li>Gere relatórios de espectros</li>
