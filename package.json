@@ -4,9 +4,10 @@
   "description": "Super App para monitoramento e gestão de práticas regenerativas",
   "main": "index.html",
   "scripts": {
-    "dev": "live-server --port=8000",
-    "build": "echo 'Build completed - static files ready'",
-    "start": "live-server --port=8000",
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "start": "vite",
     "deploy": "vercel --prod"
   },
   "keywords": [
@@ -21,7 +22,8 @@
   "author": "Ricardo Mestre",
   "license": "MIT",
   "devDependencies": {
-    "live-server": "^1.2.2"
+    "live-server": "^1.2.2",
+    "vite": "^5.0.0"
   },
   "dependencies": {
     "chart.js": "^4.4.0",

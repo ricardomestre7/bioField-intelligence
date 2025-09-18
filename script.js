@@ -1695,29 +1695,29 @@ class BioFieldManager {
             return;
         }
 
-        container.innerHTML = this.evaluations.map(eval => `
+        container.innerHTML = this.evaluations.map(evaluation => `
             <div class="evaluation-item">
-                <h4>${this.getLocationName(eval.location)}</h4>
+                <h4>${this.getLocationName(evaluation.location)}</h4>
                 <div class="evaluation-metrics">
                     <div class="evaluation-metric">
                         <div class="label">Bio Index</div>
-                        <div class="value">${eval.bio_index}</div>
+                        <div class="value">${evaluation.bio_index}</div>
                     </div>
                     <div class="evaluation-metric">
                         <div class="label">Coerência</div>
-                        <div class="value">${eval.vibrational_coherence}</div>
+                        <div class="value">${evaluation.vibrational_coherence}</div>
                     </div>
                     <div class="evaluation-metric">
                         <div class="label">Qualidade</div>
-                        <div class="value">${eval.info_quality}</div>
+                        <div class="value">${evaluation.info_quality}</div>
                     </div>
                     <div class="evaluation-metric">
                         <div class="label">Ruído EM</div>
-                        <div class="value">${eval.em_noise}</div>
+                        <div class="value">${evaluation.em_noise}</div>
                     </div>
                 </div>
-                <div class="evaluation-date">${new Date(eval.date).toLocaleDateString('pt-BR')}</div>
-                ${eval.notes ? `<div class="evaluation-notes">${eval.notes}</div>` : ''}
+                <div class="evaluation-date">${new Date(evaluation.date).toLocaleDateString('pt-BR')}</div>
+                ${evaluation.notes ? `<div class="evaluation-notes">${evaluation.notes}</div>` : ''}
             </div>
         `).join('');
     }
@@ -1799,6 +1799,10 @@ class ChartManager {
         this.createCoherenceChart();
         this.createQualityChart();
         this.createNoiseChart();
+        this.createAudioSpectrumChart();
+        this.createFrequencyChart();
+        this.createHarmonicChart();
+        this.initAudioCapture();
     }
 
     createBioIndexChart() {
@@ -2064,6 +2068,224 @@ class ChartManager {
             labels: ['Recepção', 'Sala Técnica', 'Sala de Meditação', 'Cozinha'],
             values: [40, 85, 20, 60] // Lower values = better (less noise)
         };
+    }
+
+    // Métodos para captura de áudio e análise de espectro
+    async initAudioCapture() {
+        try {
+            this.audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            this.analyser = this.audioContext.createAnalyser();
+            this.analyser.fftSize = 2048;
+            this.bufferLength = this.analyser.frequencyBinCount;
+            this.dataArray = new Uint8Array(this.bufferLength);
+            this.isCapturing = false;
+            
+            console.log('Sistema de áudio inicializado com sucesso');
+        } catch (error) {
+            console.error('Erro ao inicializar sistema de áudio:', error);
+        }
+    }
+
+    async startAudioCapture() {
+        try {
+            const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+            const source = this.audioContext.createMediaStreamSource(stream);
+            source.connect(this.analyser);
+            
+            this.isCapturing = true;
+            this.mediaStream = stream;
+            this.updateAudioSpectrum();
+            
+            // Atualizar botões
+            document.getElementById('startAudio').disabled = true;
+            document.getElementById('stopAudio').disabled = false;
+            
+            console.log('Captura de áudio iniciada');
+        } catch (error) {
+            console.error('Erro ao acessar microfone:', error);
+            alert('Erro ao acessar o microfone. Verifique as permissões.');
+        }
+    }
+
+    stopAudioCapture() {
+        if (this.mediaStream) {
+            this.mediaStream.getTracks().forEach(track => track.stop());
+        }
+        this.isCapturing = false;
+        
+        // Atualizar botões
+        document.getElementById('startAudio').disabled = false;
+        document.getElementById('stopAudio').disabled = true;
+        
+        console.log('Captura de áudio parada');
+    }
+
+    updateAudioSpectrum() {
+        if (!this.isCapturing) return;
+        
+        this.analyser.getByteFrequencyData(this.dataArray);
+        
+        // Atualizar gráfico de espectro em tempo real
+        if (this.audioSpectrumChart) {
+            const frequencies = Array.from(this.dataArray).slice(0, 50); // Primeiras 50 frequências
+            this.audioSpectrumChart.data.datasets[0].data = frequencies;
+            this.audioSpectrumChart.update('none');
+        }
+        
+        // Atualizar gráfico de frequências
+        if (this.frequencyChart) {
+            const avgFreq = this.dataArray.reduce((a, b) => a + b) / this.dataArray.length;
+            this.frequencyChart.data.datasets[0].data.push(avgFreq);
+            this.frequencyChart.data.labels.push(new Date().toLocaleTimeString());
+            
+            // Manter apenas os últimos 20 pontos
+            if (this.frequencyChart.data.datasets[0].data.length > 20) {
+                this.frequencyChart.data.datasets[0].data.shift();
+                this.frequencyChart.data.labels.shift();
+            }
+            this.frequencyChart.update('none');
+        }
+        
+        requestAnimationFrame(() => this.updateAudioSpectrum());
+    }
+
+    createAudioSpectrumChart() {
+        const ctx = document.getElementById('audioSpectrumChart');
+        if (!ctx) return;
+
+        this.audioSpectrumChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: Array.from({length: 50}, (_, i) => `${(i * 22050 / 1024).toFixed(0)}Hz`),
+                datasets: [{
+                    label: 'Amplitude',
+                    data: new Array(50).fill(0),
+                    backgroundColor: 'rgba(75, 192, 192, 0.6)',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: 255,
+                        title: {
+                            display: true,
+                            text: 'Amplitude'
+                        }
+                    },
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Frequência (Hz)'
+                        }
+                    }
+                },
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Espectro de Áudio em Tempo Real'
+                    }
+                },
+                animation: false
+            }
+        });
+    }
+
+    createFrequencyChart() {
+        const ctx = document.getElementById('frequencyChart');
+        if (!ctx) return;
+
+        this.frequencyChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: [],
+                datasets: [{
+                    label: 'Frequência Média',
+                    data: [],
+                    borderColor: 'rgba(255, 99, 132, 1)',
+                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                    tension: 0.4,
+                    fill: true
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: 255,
+                        title: {
+                            display: true,
+                            text: 'Amplitude Média'
+                        }
+                    },
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Tempo'
+                        }
+                    }
+                },
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Análise de Frequências ao Longo do Tempo'
+                    }
+                }
+            }
+        });
+    }
+
+    createHarmonicChart() {
+        const ctx = document.getElementById('harmonicChart');
+        if (!ctx) return;
+
+        // Dados simulados para análise harmônica
+        const harmonicData = {
+            labels: ['Fundamental', '2ª Harmônica', '3ª Harmônica', '4ª Harmônica', '5ª Harmônica'],
+            datasets: [{
+                label: 'Amplitude',
+                data: [100, 45, 30, 20, 15],
+                backgroundColor: [
+                    'rgba(255, 206, 86, 0.6)',
+                    'rgba(75, 192, 192, 0.6)',
+                    'rgba(153, 102, 255, 0.6)',
+                    'rgba(255, 159, 64, 0.6)',
+                    'rgba(199, 199, 199, 0.6)'
+                ],
+                borderColor: [
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(153, 102, 255, 1)',
+                    'rgba(255, 159, 64, 1)',
+                    'rgba(199, 199, 199, 1)'
+                ],
+                borderWidth: 1
+            }]
+        };
+
+        this.harmonicChart = new Chart(ctx, {
+            type: 'doughnut',
+            data: harmonicData,
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Análise Harmônica'
+                    },
+                    legend: {
+                        position: 'bottom'
+                    }
+                }
+            }
+        });
     }
 
     refreshAllCharts() {

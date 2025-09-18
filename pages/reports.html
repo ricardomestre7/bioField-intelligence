@@ -76,6 +76,39 @@
                             <canvas id="noiseChart"></canvas>
                         </div>
                     </div>
+                    
+                    <!-- Audio Spectrum Analysis Chart -->
+                    <div class="chart-card">
+                        <h3><i class="fas fa-microphone"></i> Espectro de Áudio em Tempo Real</h3>
+                        <div class="chart-controls">
+                            <button id="startAudioBtn" class="btn-primary">
+                                <i class="fas fa-play"></i> Iniciar Captura
+                            </button>
+                            <button id="stopAudioBtn" class="btn-secondary" disabled>
+                                <i class="fas fa-stop"></i> Parar
+                            </button>
+                            <span id="audioStatus" class="status-indicator">Desconectado</span>
+                        </div>
+                        <div class="chart-wrapper">
+                            <canvas id="audioSpectrumChart"></canvas>
+                        </div>
+                    </div>
+                    
+                    <!-- Frequency Analysis Chart -->
+                    <div class="chart-card">
+                        <h3><i class="fas fa-wave-square"></i> Análise de Frequências</h3>
+                        <div class="chart-wrapper">
+                            <canvas id="frequencyChart"></canvas>
+                        </div>
+                    </div>
+                    
+                    <!-- Harmonic Analysis Chart -->
+                    <div class="chart-card">
+                        <h3><i class="fas fa-music"></i> Análise Harmônica</h3>
+                        <div class="chart-wrapper">
+                            <canvas id="harmonicChart"></canvas>
+                        </div>
+                    </div>
                 </div>
                 
                 <!-- Report Actions -->
@@ -148,17 +181,20 @@
     <script>
         // Reports page specific functionality
         document.addEventListener('DOMContentLoaded', function() {
-            // Initialize Chart Manager if not already done
-            if (!window.chartManager) {
-                window.chartManager = new ChartManager();
-            }
-            
-            // Create all charts
+            // Wait for script.js to load completely
             setTimeout(() => {
-                if (window.chartManager) {
-                    window.chartManager.createAllCharts();
+                // Initialize Chart Manager if not already done
+                if (typeof ChartManager !== 'undefined' && !window.chartManager) {
+                    window.chartManager = new ChartManager();
                 }
-            }, 500);
+                
+                // Create all charts
+                setTimeout(() => {
+                    if (window.chartManager && typeof window.chartManager.createAllCharts === 'function') {
+                        window.chartManager.createAllCharts();
+                    }
+                }, 500);
+            }, 100);
         });
     </script>
 </body>

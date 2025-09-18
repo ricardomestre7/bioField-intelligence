@@ -1,0 +1,1013 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste de Microfone - BioField Intelligence</title>
+    <link rel="stylesheet" href="../styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🎤 Teste de Microfone e Análise de Ruído</h1>
+            <nav>
+                <a href="../index.html">Início</a>
+                <a href="../dashboard.html">Dashboard</a>
+                <a href="reports.html">Relatórios</a>
+                <a href="evaluation.html">Avaliação</a>
+            </nav>
+        </header>
+
+        <main>
+            <!-- Seção de Instruções -->
+            <section class="microphone-instructions">
+                <h2>📋 Instruções para Teste</h2>
+                <div class="instructions-grid">
+                    <div class="instruction-card">
+                        <h3>1. Permissões</h3>
+                        <p>Clique em "Iniciar Teste" e permita o acesso ao microfone quando solicitado pelo navegador.</p>
+                    </div>
+                    <div class="instruction-card">
+                        <h3>2. Ambiente</h3>
+                        <p>Realize o teste em um ambiente silencioso para obter melhores resultados.</p>
+                    </div>
+                    <div class="instruction-card">
+                        <h3>3. Posicionamento</h3>
+                        <p>Mantenha-se a uma distância de 30-50cm do microfone durante o teste.</p>
+                    </div>
+                    <div class="instruction-card">
+                        <h3>4. Duração</h3>
+                        <p>O teste deve durar entre 30 segundos a 2 minutos para análise completa.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Controles de Teste -->
+            <section class="microphone-controls">
+                <h2>🎛️ Controles de Teste</h2>
+                <div class="control-panel">
+                    <button id="startMicTest" class="btn-primary">🎤 Iniciar Teste de Áudio</button>
+                    <button id="stopMicTest" class="btn-secondary" disabled>⏹️ Parar Áudio</button>
+                    <button id="startWebcam" class="btn-primary">📹 Iniciar Webcam</button>
+                    <button id="stopWebcam" class="btn-secondary" disabled>⏹️ Parar Webcam</button>
+                    <button id="calibrateMic" class="btn-accent">⚙️ Calibrar</button>
+                </div>
+                
+                <div class="test-status">
+                    <div class="status-indicator" id="micStatus">
+                        <span class="status-dot"></span>
+                        <span class="status-text">Aguardando início do teste</span>
+                    </div>
+                    <div class="status-indicator" id="webcamStatus">
+                        <span class="status-dot"></span>
+                        <span class="status-text">Webcam desconectada</span>
+                    </div>
+                    <div class="volume-meter">
+                        <label>Nível de Volume:</label>
+                        <div class="volume-bar">
+                            <div class="volume-fill" id="volumeFill"></div>
+                        </div>
+                        <span id="volumeValue">0%</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Seção de Webcam -->
+            <section class="webcam-section">
+                <h2>📹 Análise Visual</h2>
+                <div class="webcam-container">
+                    <div class="video-display">
+                        <video id="webcamVideo" autoplay muted></video>
+                        <canvas id="webcamCanvas" style="display: none;"></canvas>
+                    </div>
+                    <div class="webcam-controls">
+                        <div class="webcam-options">
+                            <label>
+                                <input type="checkbox" id="motionDetection"> Detecção de Movimento
+                            </label>
+                            <label>
+                                <input type="checkbox" id="colorAnalysis"> Análise de Cores
+                            </label>
+                            <label>
+                                <input type="checkbox" id="faceDetection"> Detecção Facial
+                            </label>
+                        </div>
+                        <div class="webcam-metrics">
+                            <div class="metric">
+                                <span>Movimento:</span>
+                                <span id="motionLevel">0%</span>
+                            </div>
+                            <div class="metric">
+                                <span>Luminosidade:</span>
+                                <span id="brightnessLevel">0%</span>
+                            </div>
+                            <div class="metric">
+                                <span>Contraste:</span>
+                                <span id="contrastLevel">0%</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Gráficos de Análise -->
+            <section class="analysis-charts">
+                <h2>📊 Análise em Tempo Real</h2>
+                
+                <div class="charts-grid">
+                    <!-- Espectro de Frequência -->
+                    <div class="chart-container">
+                        <h3>Espectro de Frequência</h3>
+                        <canvas id="frequencySpectrumChart"></canvas>
+                    </div>
+
+                    <!-- Análise de Ruído -->
+                    <div class="chart-container">
+                        <h3>Análise de Ruído</h3>
+                        <canvas id="noiseAnalysisChart"></canvas>
+                    </div>
+
+                    <!-- Qualidade do Sinal -->
+                    <div class="chart-container">
+                        <h3>Qualidade do Sinal</h3>
+                        <canvas id="signalQualityChart"></canvas>
+                    </div>
+
+                    <!-- Histórico de Volume -->
+                    <div class="chart-container">
+                        <h3>Histórico de Volume</h3>
+                        <canvas id="volumeHistoryChart"></canvas>
+                    </div>
+
+                    <!-- Análise de Movimento -->
+                    <div class="chart-container">
+                        <h3>Análise de Movimento</h3>
+                        <canvas id="motionAnalysisChart"></canvas>
+                    </div>
+
+                    <!-- Análise de Cores -->
+                    <div class="chart-container">
+                        <h3>Distribuição de Cores</h3>
+                        <canvas id="colorDistributionChart"></canvas>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Resultados do Teste -->
+            <section class="test-results">
+                <h2>📈 Resultados do Teste</h2>
+                <div class="results-grid">
+                    <div class="result-card">
+                        <h3>Qualidade Geral</h3>
+                        <div class="result-value" id="overallQuality">--</div>
+                        <div class="result-description">Avaliação geral do ambiente acústico</div>
+                    </div>
+                    <div class="result-card">
+                        <h3>Nível de Ruído</h3>
+                        <div class="result-value" id="noiseLevel">-- dB</div>
+                        <div class="result-description">Nível médio de ruído ambiente</div>
+                    </div>
+                    <div class="result-card">
+                        <h3>Frequência Dominante</h3>
+                        <div class="result-value" id="dominantFreq">-- Hz</div>
+                        <div class="result-description">Frequência com maior amplitude</div>
+                    </div>
+                    <div class="result-card">
+                        <h3>Estabilidade</h3>
+                        <div class="result-value" id="stability">--%</div>
+                        <div class="result-description">Consistência do sinal ao longo do tempo</div>
+                    </div>
+                    <div class="result-card">
+                        <h3>Movimento Detectado</h3>
+                        <div class="result-value" id="motionDetected">--%</div>
+                        <div class="result-description">Nível de atividade visual</div>
+                    </div>
+                    <div class="result-card">
+                        <h3>Qualidade Visual</h3>
+                        <div class="result-value" id="visualQuality">--</div>
+                        <div class="result-description">Avaliação da qualidade da imagem</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Recomendações -->
+            <section class="recommendations">
+                <h2>💡 Recomendações</h2>
+                <div id="recommendationsList" class="recommendations-list">
+                    <p>Inicie um teste para receber recomendações personalizadas.</p>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="../script.js"></script>
+    <script>
+        'use strict';
+        
+        // Classe específica para teste de microfone
+        class MicrophoneTest {
+            constructor() {
+                this.isTestRunning = false;
+                this.isWebcamRunning = false;
+                this.audioContext = null;
+                this.analyser = null;
+                this.microphone = null;
+                this.dataArray = null;
+                this.webcamStream = null;
+                this.webcamVideo = null;
+                this.webcamCanvas = null;
+                this.webcamContext = null;
+                this.previousFrame = null;
+                this.charts = {};
+                this.testData = {
+                    volumes: [],
+                    frequencies: [],
+                    noiseLevel: 0,
+                    dominantFreq: 0,
+                    quality: 0,
+                    motionData: [],
+                    brightnessData: [],
+                    colorData: []
+                };
+            }
+
+            async init() {
+                this.setupEventListeners();
+                await this.initializeAudioContext();
+                this.initializeWebcam();
+                this.createCharts();
+            }
+
+            initializeWebcam() {
+                this.webcamVideo = document.getElementById('webcamVideo');
+                this.webcamCanvas = document.getElementById('webcamCanvas');
+                this.webcamContext = this.webcamCanvas.getContext('2d');
+                
+                // Configurar canvas com as mesmas dimensões do vídeo
+                this.webcamVideo.addEventListener('loadedmetadata', () => {
+                    this.webcamCanvas.width = this.webcamVideo.videoWidth;
+                    this.webcamCanvas.height = this.webcamVideo.videoHeight;
+                });
+            }
+
+            setupEventListeners() {
+                document.getElementById('startMicTest').addEventListener('click', () => this.startTest());
+                document.getElementById('stopMicTest').addEventListener('click', () => this.stopTest());
+                document.getElementById('startWebcam').addEventListener('click', () => this.startWebcam());
+                document.getElementById('stopWebcam').addEventListener('click', () => this.stopWebcam());
+                document.getElementById('calibrateMic').addEventListener('click', () => this.calibrate());
+                
+                // Event listeners para opções da webcam
+                document.getElementById('motionDetection').addEventListener('change', (e) => {
+                    this.motionDetectionEnabled = e.target.checked;
+                });
+                document.getElementById('colorAnalysis').addEventListener('change', (e) => {
+                    this.colorAnalysisEnabled = e.target.checked;
+                });
+                document.getElementById('faceDetection').addEventListener('change', (e) => {
+                    this.faceDetectionEnabled = e.target.checked;
+                });
+            }
+
+            async initializeAudioContext() {
+                try {
+                    this.audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                    this.analyser = this.audioContext.createAnalyser();
+                    this.analyser.fftSize = 2048;
+                    this.dataArray = new Uint8Array(this.analyser.frequencyBinCount);
+                } catch (error) {
+                    console.error('Erro ao inicializar contexto de áudio:', error);
+                }
+            }
+
+            async startTest() {
+                try {
+                    const stream = await navigator.mediaDevices.getUserMedia({ 
+                        audio: {
+                            echoCancellation: false,
+                            noiseSuppression: false,
+                            autoGainControl: false
+                        } 
+                    });
+                    
+                    this.microphone = this.audioContext.createMediaStreamSource(stream);
+                    this.microphone.connect(this.analyser);
+                    
+                    this.isTestRunning = true;
+                    this.updateStatus('Teste em andamento', 'running');
+                    
+                    document.getElementById('startMicTest').disabled = true;
+                    document.getElementById('stopMicTest').disabled = false;
+                    
+                    this.analyzeAudio();
+                } catch (error) {
+                    console.error('Erro ao iniciar teste:', error);
+                    alert('Erro ao acessar o microfone. Verifique as permissões.');
+                }
+            }
+
+            stopTest() {
+                this.isTestRunning = false;
+                
+                if (this.microphone) {
+                    this.microphone.disconnect();
+                }
+                
+                this.updateStatus('Teste finalizado', 'stopped');
+                
+                document.getElementById('startMicTest').disabled = false;
+                document.getElementById('stopMicTest').disabled = true;
+                
+                this.generateResults();
+                this.generateRecommendations();
+            }
+
+            async startWebcam() {
+                try {
+                    this.webcamStream = await navigator.mediaDevices.getUserMedia({ 
+                        video: { 
+                            width: { ideal: 640 },
+                            height: { ideal: 480 },
+                            facingMode: 'user'
+                        } 
+                    });
+                    
+                    this.webcamVideo.srcObject = this.webcamStream;
+                    this.isWebcamRunning = true;
+                    
+                    this.updateWebcamStatus('Webcam ativa', 'running');
+                    
+                    document.getElementById('startWebcam').disabled = true;
+                    document.getElementById('stopWebcam').disabled = false;
+                    
+                    // Iniciar análise visual
+                    this.analyzeVideo();
+                    
+                } catch (error) {
+                    console.error('Erro ao iniciar webcam:', error);
+                    alert('Erro ao acessar a webcam. Verifique as permissões.');
+                }
+            }
+
+            stopWebcam() {
+                this.isWebcamRunning = false;
+                
+                if (this.webcamStream) {
+                    this.webcamStream.getTracks().forEach(track => track.stop());
+                }
+                
+                this.webcamVideo.srcObject = null;
+                this.updateWebcamStatus('Webcam desconectada', 'stopped');
+                
+                document.getElementById('startWebcam').disabled = false;
+                document.getElementById('stopWebcam').disabled = true;
+            }
+
+            analyzeVideo() {
+                if (!this.isWebcamRunning) return;
+                
+                // Capturar frame atual
+                this.webcamContext.drawImage(this.webcamVideo, 0, 0, this.webcamCanvas.width, this.webcamCanvas.height);
+                const currentFrame = this.webcamContext.getImageData(0, 0, this.webcamCanvas.width, this.webcamCanvas.height);
+                
+                // Análise de movimento
+                if (this.motionDetectionEnabled && this.previousFrame) {
+                    const motionLevel = this.detectMotion(currentFrame, this.previousFrame);
+                    this.updateMotionDisplay(motionLevel);
+                    this.testData.motionData.push(motionLevel);
+                }
+                
+                // Análise de cores e brilho
+                if (this.colorAnalysisEnabled) {
+                    const colorData = this.analyzeColors(currentFrame);
+                    this.updateColorDisplay(colorData);
+                    this.testData.colorData.push(colorData);
+                    this.testData.brightnessData.push(colorData.brightness);
+                }
+                
+                this.previousFrame = currentFrame;
+                
+                // Atualizar gráficos
+                this.updateVisualCharts();
+                
+                requestAnimationFrame(() => this.analyzeVideo());
+            }
+
+            detectMotion(currentFrame, previousFrame) {
+                let totalDiff = 0;
+                const data1 = currentFrame.data;
+                const data2 = previousFrame.data;
+                
+                for (let i = 0; i < data1.length; i += 4) {
+                    const diff = Math.abs(data1[i] - data2[i]) + 
+                                Math.abs(data1[i + 1] - data2[i + 1]) + 
+                                Math.abs(data1[i + 2] - data2[i + 2]);
+                    totalDiff += diff;
+                }
+                
+                return Math.min(100, (totalDiff / (data1.length / 4)) / 10);
+            }
+
+            analyzeColors(frame) {
+                const data = frame.data;
+                let totalR = 0, totalG = 0, totalB = 0, totalBrightness = 0;
+                const pixelCount = data.length / 4;
+                
+                for (let i = 0; i < data.length; i += 4) {
+                    totalR += data[i];
+                    totalG += data[i + 1];
+                    totalB += data[i + 2];
+                    totalBrightness += (data[i] + data[i + 1] + data[i + 2]) / 3;
+                }
+                
+                return {
+                    r: Math.round(totalR / pixelCount),
+                    g: Math.round(totalG / pixelCount),
+                    b: Math.round(totalB / pixelCount),
+                    brightness: Math.round((totalBrightness / pixelCount) / 255 * 100)
+                };
+            }
+
+            updateMotionDisplay(motionLevel) {
+                document.getElementById('motionLevel').textContent = `${Math.round(motionLevel)}%`;
+            }
+
+            updateColorDisplay(colorData) {
+                document.getElementById('brightnessLevel').textContent = `${colorData.brightness}%`;
+                
+                // Calcular contraste baseado na variação de cores
+                const contrast = Math.abs(colorData.r - colorData.g) + Math.abs(colorData.g - colorData.b) + Math.abs(colorData.b - colorData.r);
+                document.getElementById('contrastLevel').textContent = `${Math.round(contrast / 7.65)}%`;
+            }
+
+            updateWebcamStatus(message, status) {
+                const statusElement = document.getElementById('webcamStatus');
+                const statusDot = statusElement.querySelector('.status-dot');
+                const statusText = statusElement.querySelector('.status-text');
+                
+                statusText.textContent = message;
+                statusDot.className = `status-dot ${status}`;
+            }
+
+            analyzeAudio() {
+                if (!this.isTestRunning) return;
+                
+                this.analyser.getByteFrequencyData(this.dataArray);
+                
+                // Calcular volume
+                const volume = this.dataArray.reduce((a, b) => a + b) / this.dataArray.length;
+                this.updateVolumeDisplay(volume);
+                
+                // Atualizar gráficos
+                this.updateCharts();
+                
+                // Armazenar dados para análise
+                this.testData.volumes.push(volume);
+                this.testData.frequencies.push([...this.dataArray]);
+                
+                requestAnimationFrame(() => this.analyzeAudio());
+            }
+
+            updateVolumeDisplay(volume) {
+                const percentage = Math.round((volume / 255) * 100);
+                document.getElementById('volumeFill').style.width = `${percentage}%`;
+                document.getElementById('volumeValue').textContent = `${percentage}%`;
+            }
+
+            updateStatus(message, status) {
+                const statusElement = document.getElementById('micStatus');
+                const statusDot = statusElement.querySelector('.status-dot');
+                const statusText = statusElement.querySelector('.status-text');
+                
+                statusText.textContent = message;
+                statusDot.className = `status-dot ${status}`;
+            }
+
+            createCharts() {
+                // Gráfico de Espectro de Frequência com cores profissionais de espectografia
+                const freqCtx = document.getElementById('frequencySpectrumChart');
+                this.charts.frequency = new Chart(freqCtx, {
+                    type: 'bar',
+                    data: {
+                        labels: Array.from({length: 50}, (_, i) => `${Math.round(i * 22050 / 1024)}Hz`),
+                        datasets: [{
+                            label: 'Amplitude (dB)',
+                            data: new Array(50).fill(0),
+                            backgroundColor: (ctx) => {
+                                const value = ctx.parsed.y;
+                                if (value > 200) return '#ff0040'; // Vermelho - Alta amplitude
+                                if (value > 150) return '#ff8000'; // Laranja - Média-alta
+                                if (value > 100) return '#ffff00'; // Amarelo - Média
+                                if (value > 50) return '#80ff00';  // Verde-amarelo - Baixa-média
+                                return '#00ff80'; // Verde - Baixa amplitude
+                            },
+                            borderColor: '#ffffff',
+                            borderWidth: 0.5
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        animation: false,
+                        plugins: {
+                            legend: {
+                                labels: { color: '#f1f5f9' }
+                            },
+                            title: {
+                                display: true,
+                                text: 'Espectro de Frequência em Tempo Real',
+                                color: '#f1f5f9',
+                                font: { size: 14, weight: 'bold' }
+                            }
+                        },
+                        scales: {
+                            y: { 
+                                beginAtZero: true, 
+                                max: 255,
+                                ticks: { color: '#cbd5e1' },
+                                grid: { color: 'rgba(203, 213, 225, 0.1)' },
+                                title: {
+                                    display: true,
+                                    text: 'Amplitude (dB)',
+                                    color: '#f1f5f9'
+                                }
+                            },
+                            x: {
+                                ticks: { 
+                                    color: '#cbd5e1',
+                                    maxTicksLimit: 10
+                                },
+                                grid: { color: 'rgba(203, 213, 225, 0.1)' },
+                                title: {
+                                    display: true,
+                                    text: 'Frequência (Hz)',
+                                    color: '#f1f5f9'
+                                }
+                            }
+                        }
+                    }
+                });
+
+                // Outros gráficos...
+                this.createNoiseAnalysisChart();
+                this.createSignalQualityChart();
+                this.createVolumeHistoryChart();
+                this.createMotionAnalysisChart();
+                this.createColorDistributionChart();
+            }
+
+            createMotionAnalysisChart() {
+                const ctx = document.getElementById('motionAnalysisChart');
+                this.charts.motion = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: Array.from({length: 25}, (_, i) => `${i}s`),
+                        datasets: [{
+                            label: 'Aceleração X (m/s²)',
+                            data: Array.from({length: 25}, () => Math.random() * 4 - 2),
+                            borderColor: '#ff6b6b',
+                            backgroundColor: 'rgba(255, 107, 107, 0.1)',
+                            borderWidth: 2,
+                            fill: false,
+                            tension: 0.3
+                        }, {
+                            label: 'Aceleração Y (m/s²)',
+                            data: Array.from({length: 25}, () => Math.random() * 4 - 2),
+                            borderColor: '#4ecdc4',
+                            backgroundColor: 'rgba(78, 205, 196, 0.1)',
+                            borderWidth: 2,
+                            fill: false,
+                            tension: 0.3
+                        }, {
+                            label: 'Aceleração Z (m/s²)',
+                            data: Array.from({length: 25}, () => Math.random() * 4 - 2),
+                            borderColor: '#45b7d1',
+                            backgroundColor: 'rgba(69, 183, 209, 0.1)',
+                            borderWidth: 2,
+                            fill: false,
+                            tension: 0.3
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                labels: { color: '#f1f5f9' }
+                            },
+                            title: {
+                                display: true,
+                                text: 'Análise de Movimento Triaxial',
+                                color: '#f1f5f9',
+                                font: { size: 14, weight: 'bold' }
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: false,
+                                min: -3,
+                                max: 3,
+                                ticks: { 
+                                    color: '#cbd5e1',
+                                    callback: function(value) {
+                                        return value.toFixed(1) + ' m/s²';
+                                    }
+                                },
+                                grid: { color: 'rgba(203, 213, 225, 0.1)' },
+                                title: {
+                                    display: true,
+                                    text: 'Aceleração (m/s²)',
+                                    color: '#f1f5f9'
+                                }
+                            },
+                            x: {
+                                ticks: { 
+                                    color: '#cbd5e1',
+                                    maxTicksLimit: 8
+                                },
+                                grid: { color: 'rgba(203, 213, 225, 0.1)' },
+                                title: {
+                                    display: true,
+                                    text: 'Tempo (s)',
+                                    color: '#f1f5f9'
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+
+            createColorDistributionChart() {
+                const ctx = document.getElementById('colorDistributionChart');
+                this.charts.colors = new Chart(ctx, {
+                    type: 'polarArea',
+                    data: {
+                        labels: ['Vermelho', 'Verde', 'Azul', 'Amarelo', 'Magenta', 'Ciano'],
+                        datasets: [{
+                            label: 'Distribuição Espectral RGB',
+                            data: [85, 92, 78, 65, 45, 58],
+                            backgroundColor: [
+                                'rgba(255, 99, 132, 0.7)',
+                                'rgba(75, 192, 192, 0.7)',
+                                'rgba(54, 162, 235, 0.7)',
+                                'rgba(255, 205, 86, 0.7)',
+                                'rgba(255, 99, 255, 0.7)',
+                                'rgba(99, 255, 255, 0.7)'
+                            ],
+                            borderColor: [
+                                '#ff6384',
+                                '#4bc0c0',
+                                '#36a2eb',
+                                '#ffcd56',
+                                '#ff63ff',
+                                '#63ffff'
+                            ],
+                            borderWidth: 2
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                labels: { 
+                                    color: '#f1f5f9',
+                                    usePointStyle: true
+                                }
+                            },
+                            title: {
+                                display: true,
+                                text: 'Análise Espectral de Cores',
+                                color: '#f1f5f9',
+                                font: { size: 14, weight: 'bold' }
+                            }
+                        },
+                        scales: {
+                            r: {
+                                beginAtZero: true,
+                                max: 100,
+                                ticks: { 
+                                    color: '#cbd5e1',
+                                    backdropColor: 'transparent'
+                                },
+                                grid: { color: 'rgba(203, 213, 225, 0.2)' },
+                                pointLabels: { 
+                                    color: '#f1f5f9',
+                                    font: { size: 11 }
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+
+            updateVisualCharts() {
+                // Atualizar gráfico de movimento
+                if (this.charts.motion && this.testData.motionData.length > 0) {
+                    const latestMotion = this.testData.motionData[this.testData.motionData.length - 1];
+                    
+                    this.charts.motion.data.labels.push(new Date().toLocaleTimeString());
+                    this.charts.motion.data.datasets[0].data.push(latestMotion);
+                    
+                    // Manter apenas os últimos 20 pontos
+                    if (this.charts.motion.data.labels.length > 20) {
+                        this.charts.motion.data.labels.shift();
+                        this.charts.motion.data.datasets[0].data.shift();
+                    }
+                    
+                    this.charts.motion.update('none');
+                }
+
+                // Atualizar gráfico de cores
+                if (this.charts.colors && this.testData.colorData.length > 0) {
+                    const latestColor = this.testData.colorData[this.testData.colorData.length - 1];
+                    
+                    this.charts.colors.data.datasets[0].data = [
+                        latestColor.r,
+                        latestColor.g,
+                        latestColor.b
+                    ];
+                    
+                    this.charts.colors.update('none');
+                }
+            }
+
+            createNoiseAnalysisChart() {
+                const ctx = document.getElementById('noiseAnalysisChart');
+                this.charts.noise = new Chart(ctx, {
+                    type: 'radar',
+                    data: {
+                        labels: ['Baixas (20-250Hz)', 'Médias-Baixas (250-500Hz)', 'Médias (500-2kHz)', 'Médias-Altas (2-4kHz)', 'Altas (4-8kHz)', 'Ultra-Altas (8-20kHz)'],
+                        datasets: [{
+                            label: 'Nível de Ruído',
+                            data: [65, 45, 30, 25, 35, 20],
+                            backgroundColor: 'rgba(139, 92, 246, 0.2)',
+                            borderColor: '#8b5cf6',
+                            borderWidth: 2,
+                            pointBackgroundColor: '#8b5cf6',
+                            pointBorderColor: '#ffffff',
+                            pointRadius: 4
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                labels: { color: '#f1f5f9' }
+                            },
+                            title: {
+                                display: true,
+                                text: 'Análise Espectral de Ruído',
+                                color: '#f1f5f9',
+                                font: { size: 14, weight: 'bold' }
+                            }
+                        },
+                        scales: {
+                            r: {
+                                beginAtZero: true,
+                                max: 100,
+                                ticks: { 
+                                    color: '#cbd5e1',
+                                    backdropColor: 'transparent'
+                                },
+                                grid: { color: 'rgba(139, 92, 246, 0.2)' },
+                                pointLabels: { color: '#f1f5f9' }
+                            }
+                        }
+                    }
+                });
+            }
+
+            createSignalQualityChart() {
+                const ctx = document.getElementById('signalQualityChart');
+                this.charts.quality = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: Array.from({length: 20}, (_, i) => `${i}s`),
+                        datasets: [{
+                            label: 'SNR (dB)',
+                            data: Array.from({length: 20}, () => Math.random() * 40 + 20),
+                            borderColor: '#06d6a0',
+                            backgroundColor: 'rgba(6, 214, 160, 0.1)',
+                            borderWidth: 2,
+                            fill: true,
+                            tension: 0.4
+                        }, {
+                            label: 'THD (%)',
+                            data: Array.from({length: 20}, () => Math.random() * 5 + 1),
+                            borderColor: '#f72585',
+                            backgroundColor: 'rgba(247, 37, 133, 0.1)',
+                            borderWidth: 2,
+                            fill: true,
+                            tension: 0.4
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                labels: { color: '#f1f5f9' }
+                            },
+                            title: {
+                                display: true,
+                                text: 'Qualidade do Sinal em Tempo Real',
+                                color: '#f1f5f9',
+                                font: { size: 14, weight: 'bold' }
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                ticks: { color: '#cbd5e1' },
+                                grid: { color: 'rgba(203, 213, 225, 0.1)' },
+                                title: {
+                                    display: true,
+                                    text: 'Valor',
+                                    color: '#f1f5f9'
+                                }
+                            },
+                            x: {
+                                ticks: { color: '#cbd5e1' },
+                                grid: { color: 'rgba(203, 213, 225, 0.1)' },
+                                title: {
+                                    display: true,
+                                    text: 'Tempo (s)',
+                                    color: '#f1f5f9'
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+
+            createVolumeHistoryChart() {
+                const ctx = document.getElementById('volumeHistoryChart');
+                this.charts.volume = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: Array.from({length: 30}, (_, i) => `${i}s`),
+                        datasets: [{
+                            label: 'Volume RMS (dB)',
+                            data: Array.from({length: 30}, () => Math.random() * 60 - 40),
+                            borderColor: '#4cc9f0',
+                            backgroundColor: 'rgba(76, 201, 240, 0.1)',
+                            borderWidth: 2,
+                            fill: true,
+                            tension: 0.3,
+                            pointRadius: 2
+                        }, {
+                            label: 'Picos (dB)',
+                            data: Array.from({length: 30}, () => Math.random() * 40 - 20),
+                            borderColor: '#f72585',
+                            backgroundColor: 'rgba(247, 37, 133, 0.05)',
+                            borderWidth: 1,
+                            fill: false,
+                            tension: 0.2,
+                            pointRadius: 1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                labels: { color: '#f1f5f9' }
+                            },
+                            title: {
+                                display: true,
+                                text: 'Histórico de Volume e Picos',
+                                color: '#f1f5f9',
+                                font: { size: 14, weight: 'bold' }
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: false,
+                                min: -60,
+                                max: 0,
+                                ticks: { 
+                                    color: '#cbd5e1',
+                                    callback: function(value) {
+                                        return value + ' dB';
+                                    }
+                                },
+                                grid: { color: 'rgba(203, 213, 225, 0.1)' },
+                                title: {
+                                    display: true,
+                                    text: 'Amplitude (dB)',
+                                    color: '#f1f5f9'
+                                }
+                            },
+                            x: {
+                                ticks: { 
+                                    color: '#cbd5e1',
+                                    maxTicksLimit: 10
+                                },
+                                grid: { color: 'rgba(203, 213, 225, 0.1)' },
+                                title: {
+                                    display: true,
+                                    text: 'Tempo (s)',
+                                    color: '#f1f5f9'
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+
+            updateCharts() {
+                // Atualizar gráfico de frequência
+                if (this.charts.frequency) {
+                    const frequencies = Array.from(this.dataArray).slice(0, 50);
+                    this.charts.frequency.data.datasets[0].data = frequencies;
+                    this.charts.frequency.update('none');
+                }
+
+                // Atualizar histórico de volume
+                if (this.charts.volume) {
+                    const volume = this.dataArray.reduce((a, b) => a + b) / this.dataArray.length;
+                    const percentage = Math.round((volume / 255) * 100);
+                    
+                    this.charts.volume.data.labels.push(new Date().toLocaleTimeString());
+                    this.charts.volume.data.datasets[0].data.push(percentage);
+                    
+                    // Manter apenas os últimos 30 pontos
+                    if (this.charts.volume.data.labels.length > 30) {
+                        this.charts.volume.data.labels.shift();
+                        this.charts.volume.data.datasets[0].data.shift();
+                    }
+                    
+                    this.charts.volume.update('none');
+                }
+            }
+
+            generateResults() {
+                // Calcular métricas de áudio
+                const avgVolume = this.testData.volumes.reduce((a, b) => a + b, 0) / this.testData.volumes.length;
+                const noiseLevel = Math.round(avgVolume * 0.5); // Simulação
+                const dominantFreq = Math.round(Math.random() * 1000 + 200); // Simulação
+                const stability = Math.round(85 + Math.random() * 10); // Simulação
+                
+                // Calcular métricas visuais
+                let avgMotion = 0;
+                let visualQuality = 'N/A';
+                
+                if (this.testData.motionData.length > 0) {
+                    avgMotion = this.testData.motionData.reduce((a, b) => a + b, 0) / this.testData.motionData.length;
+                }
+                
+                if (this.testData.brightnessData.length > 0) {
+                    const avgBrightness = this.testData.brightnessData.reduce((a, b) => a + b, 0) / this.testData.brightnessData.length;
+                    if (avgBrightness > 70) visualQuality = 'Excelente';
+                    else if (avgBrightness > 50) visualQuality = 'Boa';
+                    else if (avgBrightness > 30) visualQuality = 'Regular';
+                    else visualQuality = 'Baixa';
+                }
+                
+                // Determinar qualidade geral do áudio
+                let audioQuality = 'Excelente';
+                if (avgVolume < 50) audioQuality = 'Baixa';
+                else if (avgVolume < 100) audioQuality = 'Boa';
+                else if (avgVolume < 150) audioQuality = 'Muito Boa';
+                
+                // Atualizar display
+                document.getElementById('overallQuality').textContent = audioQuality;
+                document.getElementById('noiseLevel').textContent = `${noiseLevel} dB`;
+                document.getElementById('dominantFreq').textContent = `${dominantFreq} Hz`;
+                document.getElementById('stability').textContent = `${stability}%`;
+                document.getElementById('motionDetected').textContent = `${Math.round(avgMotion)}%`;
+                document.getElementById('visualQuality').textContent = visualQuality;
+            }
+
+            generateRecommendations() {
+                const recommendations = [
+                    '✅ Ambiente adequado para testes bioenergéticos',
+                    '🔧 Considere usar um microfone externo para melhor qualidade',
+                    '📍 Mantenha distância consistente do microfone',
+                    '🔇 Minimize ruídos de fundo durante os testes',
+                    '⏱️ Realize testes de 1-2 minutos para melhor precisão',
+                    '📹 Use webcam para análise visual complementar',
+                    '💡 Mantenha iluminação adequada para melhor qualidade visual',
+                    '🎯 Posicione-se centralmente no campo de visão da câmera'
+                ];
+                
+                const listElement = document.getElementById('recommendationsList');
+                listElement.innerHTML = recommendations.map(rec => `<p>${rec}</p>`).join('');
+            }
+
+            calibrate() {
+                alert('Funcionalidade de calibração será implementada em breve!');
+            }
+        }
+
+        // Inicializar quando a página carregar
+        document.addEventListener('DOMContentLoaded', () => {
+            const micTest = new MicrophoneTest();
+            micTest.init();
+        });
+    </script>
+</body>
+</html>

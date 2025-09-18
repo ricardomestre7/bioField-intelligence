@@ -126,15 +126,18 @@
     <script>
         // Evaluation page specific functionality
         document.addEventListener('DOMContentLoaded', function() {
-            // Initialize BioField Manager if not already done
-            if (!window.bioFieldManager) {
-                window.bioFieldManager = new BioFieldManager();
-            }
-            
-            // Load existing evaluations
-            if (window.bioFieldManager) {
-                window.bioFieldManager.loadEvaluations();
-            }
+            // Wait for script.js to load completely
+            setTimeout(() => {
+                // Initialize BioField Manager if not already done
+                if (typeof BioFieldManager !== 'undefined' && !window.bioFieldManager) {
+                    window.bioFieldManager = new BioFieldManager();
+                }
+                
+                // Load existing evaluations
+                if (window.bioFieldManager && typeof window.bioFieldManager.loadEvaluations === 'function') {
+                    window.bioFieldManager.loadEvaluations();
+                }
+            }, 100);
         });
     </script>
 </body>
