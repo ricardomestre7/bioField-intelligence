@@ -1,3 +1,22 @@
 {
-  "version": 2
+  "version": 2,
+  "routes": [
+    {
+      "src": "/login.html",
+      "dest": "/login.html"
+    },
+    {
+      "src": "/pages/(.*)",
+      "dest": "/pages/$1"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/$1"
+    }
+  ],
+  "functions": {
+    "pages/dashboard.html": {
+      "includeFiles": "**"
+    }
+  }
 }
