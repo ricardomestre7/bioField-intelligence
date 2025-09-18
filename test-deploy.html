@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Teste Deploy - BioField Intelligence</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; background: #1a1a1a; color: white; }
+        .test-card { background: #2a2a2a; padding: 20px; border-radius: 10px; margin: 20px 0; }
+        .success { color: #4CAF50; }
+        .info { color: #2196F3; }
+    </style>
+</head>
+<body>
+    <div class="test-card">
+        <h1 class="success">✅ Deploy Funcionando!</h1>
+        <p class="info">Se você está vendo esta página, o deploy está funcionando corretamente.</p>
+        <p><strong>Data/Hora:</strong> <span id="datetime"></span></p>
+        <p><strong>Status:</strong> BioField Intelligence - Sistema Ativo</p>
+    </div>
+    
+    <div class="test-card">
+        <h2>🔗 Links de Teste:</h2>
+        <ul>
+            <li><a href="index.html" style="color: #4CAF50;">Dashboard Principal</a></li>
+            <li><a href="beta-demo.html" style="color: #4CAF50;">Painel Admin</a></li>
+            <li><a href="widget-sensor.html" style="color: #4CAF50;">Widget Sensor</a></li>
+        </ul>
+    </div>
+
+    <script>
+        document.getElementById('datetime').textContent = new Date().toLocaleString('pt-BR');
+    </script>
+</body>
+</html>
