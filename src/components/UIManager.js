@@ -193,8 +193,8 @@ export class UIManager {
                                 <span class="hamburger"></span>
                             </button>
                             <div class="logo">
-                                <span class="logo-icon">🌱</span>
-                                <span class="logo-text">RegenTech</span>
+                                <span class="logo-icon">⚛️</span>
+                                <span class="logo-text">BioField Intelligence</span>
                             </div>
                         </div>
                         
@@ -233,7 +233,7 @@ export class UIManager {
                 <footer id="app-footer" class="app-footer">
                     <div class="footer-content">
                         <div class="footer-left">
-                            <span class="footer-text">© 2024 RegenTech Solutions</span>
+                            <span class="footer-text">© 2024 BioField Intelligence</span>
                         </div>
                         <div class="footer-right">
                             <span id="status-indicator" class="status-indicator">🟢 Online</span>

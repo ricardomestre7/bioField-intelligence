@@ -15,10 +15,10 @@ import { UIManager } from '../components/ui/UIManager.js';
 import { ConfigManager } from '../config/ConfigManager.js';
 import { Logger } from '../utils/Logger.js';
 
-export class RegenPlatform {
+export class BioFieldIntelligence {
     constructor() {
         this.config = new ConfigManager();
-        this.logger = new Logger('RegenPlatform');
+        this.logger = new Logger('BioFieldIntelligence');
         this.currentSection = 'dashboard';
         this.isInitialized = false;
         
@@ -49,7 +49,7 @@ export class RegenPlatform {
 
     async init() {
         try {
-            this.logger.info('Iniciando Plataforma Regenerativa Inteligente v2.0.0');
+            this.logger.info('Iniciando BioField Intelligence v2.0.0');
             
             // Inicializar sistemas em ordem de dependência
             await this.metricsEngine.initialize();
@@ -217,4 +217,4 @@ export class RegenPlatform {
 }
 
 // Exportar instância global
-window.RegenPlatform = RegenPlatform;
+window.BioFieldIntelligence = BioFieldIntelligence;

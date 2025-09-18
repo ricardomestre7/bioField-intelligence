@@ -1,6 +1,6 @@
-// Plataforma Regenerativa Inteligente - JavaScript
+// BioField Intelligence - JavaScript
 
-class RegenPlatform {
+class BioFieldIntelligence {
     constructor() {
         this.currentSection = 'dashboard';
         this.sensors = new Map();
@@ -19,7 +19,7 @@ class RegenPlatform {
         this.initMarketplace();
         this.startRealTimeUpdates();
         this.setupAnimations();
-        console.log('🌱 Plataforma Regenerativa Inteligente inicializada');
+        console.log('🌱 BioField Intelligence inicializada');
     }
 
     // Digital Twin functionality
@@ -2332,7 +2332,7 @@ function clearForm() {
 
 // Inicializar a plataforma quando o DOM estiver carregado
 document.addEventListener('DOMContentLoaded', () => {
-    window.regenPlatform = new RegenPlatform();
+    window.bioFieldIntelligence = new BioFieldIntelligence();
     window.bioFieldManager = new BioFieldManager();
     window.chartManager = new ChartManager();
 });
@@ -2364,6 +2364,6 @@ window.RegenUtils = {
     }
 };
 
-console.log('🌍 Plataforma Regenerativa Inteligente carregada com sucesso!');
-console.log('💡 Use window.regenPlatform para acessar a instância principal');
+console.log('🌍 BioField Intelligence carregada com sucesso!');
+    console.log('💡 Use window.bioFieldIntelligence para acessar a instância principal');
 console.log('🛠️ Use window.RegenUtils para utilitários auxiliares');

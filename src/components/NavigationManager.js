@@ -623,8 +623,8 @@ export class NavigationManager {
         const navigationHTML = `
             <div class="nav-header">
                 <div class="nav-logo">
-                    <span class="logo-icon">🌱</span>
-                    <span class="logo-text">RegenTech</span>
+                    <span class="logo-icon">⚛️</span>
+                    <span class="logo-text">BioField Intelligence</span>
                 </div>
             </div>
             

@@ -13,7 +13,7 @@ export class ConfigManager {
     loadDefaultConfig() {
         return {
             platform: {
-                name: 'Plataforma Regenerativa Inteligente',
+                name: 'BioField Intelligence',
                 version: '2.0.0',
                 environment: 'development',
                 debug: true,
