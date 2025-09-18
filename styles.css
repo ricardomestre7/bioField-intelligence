@@ -108,7 +108,7 @@ body {
 /* Main Content */
 .main-content {
     flex: 1;
-    padding: 2rem;
+    padding: 1rem;
     max-width: 1400px;
     margin: 0 auto;
     width: 100%;
@@ -156,20 +156,20 @@ body {
 /* Dashboard Grid */
 .dashboard-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 2rem;
-    margin-bottom: 3rem;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 15px;
+    margin-bottom: 20px;
 }
 
 .kpi-card {
     background: linear-gradient(145deg, #1e293b, #334155);
     backdrop-filter: blur(20px);
-    border-radius: 24px;
-    padding: 2.5rem;
+    border-radius: 15px;
+    padding: 15px;
     display: flex;
     align-items: center;
-    gap: 2rem;
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(34, 197, 94, 0.2);
+    gap: 15px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(34, 197, 94, 0.2);
     transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     border: 1px solid rgba(34, 197, 94, 0.1);
     position: relative;
@@ -198,15 +198,15 @@ body {
 }
 
 .kpi-icon {
-    width: 80px;
-    height: 80px;
-    border-radius: 20px;
+    width: 60px;
+    height: 60px;
+    border-radius: 15px;
     background: linear-gradient(135deg, #22c55e, #16a34a, #15803d);
     display: flex;
     align-items: center;
     justify-content: center;
     color: white;
-    font-size: 2rem;
+    font-size: 1.5rem;
     box-shadow: 0 10px 20px rgba(34, 197, 94, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.2);
     position: relative;
     overflow: hidden;
@@ -231,16 +231,16 @@ body {
 }
 
 .kpi-content h3 {
-    font-size: 1rem;
+    font-size: 0.85rem;
     color: #94a3b8;
-    margin-bottom: 0.75rem;
+    margin-bottom: 0.5rem;
     text-transform: uppercase;
-    letter-spacing: 1px;
+    letter-spacing: 0.5px;
     font-weight: 700;
 }
 
 .kpi-value {
-    font-size: 2.5rem;
+    font-size: 1.8rem;
     font-weight: 900;
     color: #f8fafc;
     margin-bottom: 0.5rem;
@@ -7192,5 +7192,355 @@ body {
     .report-actions {
         flex-direction: column;
         align-items: center;
+    }
+}
+
+/* Firebase Integration Styles */
+.firebase-status {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 10px 20px;
+    border-radius: 25px;
+    font-weight: bold;
+    z-index: 1000;
+    transition: all 0.3s ease;
+}
+
+.firebase-status.connected {
+    background: #4caf50;
+    color: white;
+}
+
+.firebase-status.connecting {
+    background: #ff9800;
+    color: white;
+}
+
+.firebase-status.error {
+    background: #f44336;
+    color: white;
+}
+
+/* Real-time Indicator */
+.real-time-indicator {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #4caf50;
+    margin-right: 8px;
+    animation: pulse 2s infinite;
+}
+
+/* Live Data Section */
+.live-data {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 15px;
+    border-radius: 12px;
+    margin: 15px 0;
+}
+
+.live-stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.live-stat {
+    background: rgba(255,255,255,0.1);
+    padding: 15px;
+    border-radius: 10px;
+    text-align: center;
+}
+
+.live-stat-value {
+    font-size: 2rem;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.live-stat-label {
+    font-size: 0.9rem;
+    opacity: 0.9;
+}
+
+/* Sensor List */
+.sensor-list {
+    background: white;
+    border-radius: 10px;
+    padding: 15px;
+    margin: 10px 0;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+}
+
+.sensor-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    margin: 8px 0;
+    background: #f8f9fa;
+    border-radius: 8px;
+    border-left: 3px solid #4caf50;
+}
+
+.sensor-item.critical {
+    border-left-color: #f44336;
+    background: #ffebee;
+}
+
+.sensor-info h4 {
+    margin: 0 0 5px 0;
+    color: #333;
+}
+
+.sensor-info p {
+    margin: 0;
+    color: #666;
+    font-size: 0.9rem;
+}
+
+.sensor-metrics {
+    display: flex;
+    gap: 20px;
+}
+
+.metric {
+    text-align: center;
+}
+
+.metric-value {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #667eea;
+}
+
+.metric-label {
+    font-size: 0.8rem;
+    color: #666;
+}
+
+/* Log Container */
+.log-container {
+    background: #1a1f2e;
+    color: #4ade80;
+    padding: 20px;
+    border-radius: 10px;
+    margin: 20px 0;
+    max-height: 300px;
+    overflow-y: auto;
+    font-family: monospace;
+    font-size: 13px;
+}
+
+.log-entry {
+    margin: 5px 0;
+    padding: 5px;
+}
+
+.log-entry.info { color: #4ade80; }
+.log-entry.warning { color: #ff9800; }
+.log-entry.error { color: #f44336; }
+
+/* Dashboard Layout with Sidebar */
+.dashboard-layout {
+    display: flex;
+    gap: 10px;
+    min-height: auto;
+    padding: 0;
+    margin: 0;
+}
+
+.dashboard-sidebar {
+    width: 220px;
+    background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+    border-radius: 8px;
+    padding: 10px;
+    border: 1px solid rgba(34, 197, 94, 0.2);
+    height: fit-content;
+    position: sticky;
+    top: 5px;
+}
+
+.sidebar-section {
+    margin-bottom: 8px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid rgba(34, 197, 94, 0.2);
+}
+
+.sidebar-section:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+}
+
+.sidebar-section h3 {
+    color: #22c55e;
+    margin-bottom: 6px;
+    font-size: 0.8rem;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.status-cards {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.status-card {
+    background: rgba(0, 0, 0, 0.3);
+    padding: 8px;
+    border-radius: 5px;
+    text-align: center;
+    border: 1px solid rgba(34, 197, 94, 0.1);
+}
+
+.status-value {
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: #22c55e;
+    margin-bottom: 2px;
+}
+
+.status-label {
+    font-size: 0.7rem;
+    color: #9ca3af;
+}
+
+.quick-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.quick-btn {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 6px 8px;
+    background: rgba(34, 197, 94, 0.1);
+    color: #22c55e;
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 0.75rem;
+    transition: all 0.3s ease;
+    border: 1px solid rgba(34, 197, 94, 0.2);
+}
+
+.quick-btn:hover {
+    background: rgba(34, 197, 94, 0.2);
+    transform: translateX(5px);
+}
+
+.log-sidebar {
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 6px;
+    padding: 8px;
+    max-height: 150px;
+    overflow-y: auto;
+    font-family: monospace;
+    font-size: 0.7rem;
+}
+
+.log-sidebar .log-entry {
+    margin: 2px 0;
+    padding: 1px 4px;
+    border-radius: 2px;
+    background: rgba(34, 197, 94, 0.1);
+    color: #4ade80;
+}
+
+.dashboard-content {
+    flex: 1;
+    min-width: 0;
+    padding: 0;
+    margin: 0;
+}
+
+.dashboard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    padding: 10px 12px;
+    background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+    border-radius: 8px;
+    border: 1px solid rgba(34, 197, 94, 0.2);
+}
+
+.dashboard-header h2 {
+    margin: 0;
+    color: #22c55e;
+    font-size: 1.1rem;
+}
+
+.header-stats {
+    display: flex;
+    gap: 15px;
+    font-size: 0.8rem;
+    color: #9ca3af;
+}
+
+.header-stats span {
+    color: #22c55e;
+    font-weight: bold;
+}
+
+/* Mobile Responsive for Firebase */
+@media (max-width: 768px) {
+    .dashboard-layout {
+        flex-direction: column;
+    }
+    
+    .dashboard-sidebar {
+        width: 100%;
+        position: relative;
+        top: auto;
+    }
+    
+    .status-cards {
+        flex-direction: row;
+    }
+    
+    .quick-actions {
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
+    
+    .dashboard-header {
+        flex-direction: column;
+        gap: 10px;
+        text-align: center;
+    }
+    
+    .header-stats {
+        flex-direction: column;
+        gap: 5px;
+    }
+    
+    .live-stats {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .sensor-item {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .sensor-metrics {
+        margin-top: 10px;
+        justify-content: center;
+    }
+    
+    .firebase-status {
+        position: relative;
+        top: auto;
+        right: auto;
+        margin: 10px 0;
+        text-align: center;
     }
 }

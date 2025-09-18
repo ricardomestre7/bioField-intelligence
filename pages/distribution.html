@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Distribuição de Sensores - BioField Intelligence</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="../styles.css">
+    <style>
+        .distribution-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .distribution-header {
+            text-align: center;
+            margin-bottom: 40px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            border-radius: 20px;
+        }
+
+        .distribution-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .distribution-header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .qr-section {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            text-align: center;
+            margin: 30px 0;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .qr-section h3 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+        }
+
+        .qr-section p {
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 1.1rem;
+        }
+
+        #qrcode {
+            display: inline-block;
+            padding: 20px;
+            background: white;
+            border: 3px solid #e9ecef;
+            border-radius: 15px;
+            margin: 20px 0;
+        }
+
+        .link-container {
+            margin: 30px 0;
+        }
+
+        #widgetLink {
+            padding: 15px;
+            width: 100%;
+            max-width: 600px;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            font-family: monospace;
+            text-align: center;
+            font-size: 1rem;
+            margin: 10px 0;
+        }
+
+        .action-buttons {
+            margin: 30px 0;
+        }
+
+        .btn {
+            padding: 15px 30px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            margin: 10px;
+            transition: all 0.3s ease;
+            display: inline-block;
+            text-decoration: none;
+        }
+
+        .btn-success {
+            background: #4ade80;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #22c55e;
+            transform: translateY(-2px);
+        }
+
+        .btn-primary {
+            background: #667eea;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #5a6fd8;
+            transform: translateY(-2px);
+        }
+
+        .test-users-section {
+            background: #f8f9fa;
+            padding: 30px;
+            border-radius: 15px;
+            margin: 30px 0;
+        }
+
+        .test-users-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .test-user-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        .test-user-card h4 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .test-user-card p {
+            color: #666;
+            margin-bottom: 15px;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: bold;
+        }
+
+        .status-pending {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .status-active {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .instructions-section {
+            background: #e3f2fd;
+            padding: 30px;
+            border-radius: 15px;
+            margin: 30px 0;
+        }
+
+        .instructions-section h3 {
+            color: #1976d2;
+            margin-bottom: 20px;
+        }
+
+        .instructions-list {
+            text-align: left;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .instructions-list li {
+            margin: 15px 0;
+            padding: 10px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .admin-credentials {
+            background: #fff3cd;
+            border: 2px solid #ffc107;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+
+        .admin-credentials h4 {
+            color: #856404;
+            margin-bottom: 15px;
+        }
+
+        .credentials {
+            font-family: monospace;
+            background: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+
+        @media (max-width: 768px) {
+            .distribution-container {
+                padding: 10px;
+            }
+            
+            .distribution-header h1 {
+                font-size: 2rem;
+            }
+            
+            .btn {
+                display: block;
+                width: 100%;
+                margin: 10px 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="distribution-container">
+        <div class="distribution-header">
+            <h1><i class="fas fa-qrcode"></i> Distribuição de Sensores</h1>
+            <p>Fase 1: Consolidação - Teste com Equipe</p>
+        </div>
+
+        <div class="qr-section">
+            <h3><i class="fas fa-qrcode"></i> Distribuir Sensor para Equipe</h3>
+            <p>Escaneie o QR Code ou compartilhe o link para teste remoto</p>
+            
+            <div id="qrcode"></div>
+            
+            <div class="link-container">
+                <input type="text" id="widgetLink" readonly 
+                       value="https://biofield-intelligence.vercel.app/widget-sensor.html" 
+                       placeholder="Link do Widget">
+            </div>
+            
+            <div class="action-buttons">
+                <button onclick="copyLink()" class="btn btn-success">
+                    <i class="fas fa-copy"></i> Copiar Link
+                </button>
+                <button onclick="downloadQR()" class="btn btn-primary">
+                    <i class="fas fa-download"></i> Baixar QR Code
+                </button>
+                <button onclick="shareLink()" class="btn btn-primary">
+                    <i class="fas fa-share"></i> Compartilhar
+                </button>
+            </div>
+            
+            <p style="color: #999; font-size: 13px; margin-top: 20px;">
+                Equipe pode escanear e começar a enviar dados imediatamente
+            </p>
+        </div>
+
+        <div class="test-users-section">
+            <h3><i class="fas fa-users"></i> Usuários de Teste</h3>
+            <p>Distribua para 3-5 pessoas em locais estratégicos (diferentes países)</p>
+            
+            <div class="test-users-grid">
+                <div class="test-user-card">
+                    <h4><i class="fas fa-user"></i> Usuário 1</h4>
+                    <p>Local: São Paulo, Brasil</p>
+                    <span class="status-badge status-pending">Pendente</span>
+                </div>
+                <div class="test-user-card">
+                    <h4><i class="fas fa-user"></i> Usuário 2</h4>
+                    <p>Local: Lisboa, Portugal</p>
+                    <span class="status-badge status-pending">Pendente</span>
+                </div>
+                <div class="test-user-card">
+                    <h4><i class="fas fa-user"></i> Usuário 3</h4>
+                    <p>Local: Madrid, Espanha</p>
+                    <span class="status-badge status-pending">Pendente</span>
+                </div>
+                <div class="test-user-card">
+                    <h4><i class="fas fa-user"></i> Usuário 4</h4>
+                    <p>Local: Buenos Aires, Argentina</p>
+                    <span class="status-badge status-pending">Pendente</span>
+                </div>
+                <div class="test-user-card">
+                    <h4><i class="fas fa-user"></i> Usuário 5</h4>
+                    <p>Local: Miami, EUA</p>
+                    <span class="status-badge status-pending">Pendente</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="instructions-section">
+            <h3><i class="fas fa-list-check"></i> Instruções para a Equipe</h3>
+            <div class="instructions-list">
+                <ol>
+                    <li><strong>Escaneie o QR Code</strong> ou acesse o link fornecido</li>
+                    <li><strong>Aceite os termos de consentimento</strong> para coleta de dados</li>
+                    <li><strong>Clique em "Iniciar Leitura"</strong> para começar a coleta</li>
+                    <li><strong>Aguarde 2-3 minutos</strong> para coleta de dados suficientes</li>
+                    <li><strong>Clique em "Parar Leitura"</strong> quando terminar</li>
+                    <li><strong>Clique em "Enviar Dados"</strong> para enviar ao sistema</li>
+                    <li><strong>Repita o processo</strong> em diferentes horários e locais</li>
+                </ol>
+            </div>
+        </div>
+
+        <div class="admin-credentials">
+            <h4><i class="fas fa-shield-alt"></i> Credenciais de Administrador</h4>
+            <p>Use estas credenciais para acessar o painel de administração:</p>
+            <div class="credentials">
+                <strong>Email:</strong> institutodoreikiusui@gmail.com<br>
+                <strong>Senha:</strong> teste@123
+            </div>
+            <p style="margin-top: 15px; font-size: 0.9rem;">
+                <a href="beta-demo.html" class="btn btn-primary">
+                    <i class="fas fa-cog"></i> Acessar Painel Admin
+                </a>
+            </p>
+        </div>
+    </div>
+
+    <!-- Biblioteca QR Code -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+    <script>
+        // Gerar QR Code automaticamente
+        document.addEventListener('DOMContentLoaded', function() {
+            const link = document.getElementById('widgetLink').value;
+            
+            new QRCode(document.getElementById("qrcode"), {
+                text: link,
+                width: 250,
+                height: 250,
+                colorDark: "#000000",
+                colorLight: "#ffffff",
+                correctLevel: QRCode.CorrectLevel.H
+            });
+        });
+
+        // Copiar link
+        function copyLink() {
+            const input = document.getElementById('widgetLink');
+            input.select();
+            input.setSelectionRange(0, 99999); // Para mobile
+            document.execCommand('copy');
+            
+            // Feedback visual
+            const btn = event.target;
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<i class="fas fa-check"></i> Copiado!';
+            btn.style.background = '#22c55e';
+            
+            setTimeout(() => {
+                btn.innerHTML = originalText;
+                btn.style.background = '#4ade80';
+            }, 2000);
+        }
+
+        // Baixar QR Code
+        function downloadQR() {
+            const canvas = document.querySelector('#qrcode canvas');
+            if (canvas) {
+                const url = canvas.toDataURL('image/png');
+                const link = document.createElement('a');
+                link.download = 'biofield-sensor-qrcode.png';
+                link.href = url;
+                link.click();
+            }
+        }
+
+        // Compartilhar link
+        function shareLink() {
+            const link = document.getElementById('widgetLink').value;
+            
+            if (navigator.share) {
+                navigator.share({
+                    title: 'BioField Sensor - Leitura Vibracional',
+                    text: 'Acesse o sensor de leitura vibracional do BioField Intelligence',
+                    url: link
+                });
+            } else {
+                // Fallback para copiar
+                copyLink();
+            }
+        }
+
+        // Atualizar status dos usuários (simulação)
+        function updateUserStatus(userIndex, status) {
+            const badges = document.querySelectorAll('.status-badge');
+            if (badges[userIndex]) {
+                badges[userIndex].className = `status-badge status-${status}`;
+                badges[userIndex].textContent = status === 'active' ? 'Ativo' : 'Pendente';
+            }
+        }
+
+        // Simular atualizações de status (para demonstração)
+        setInterval(() => {
+            const randomUser = Math.floor(Math.random() * 5);
+            const statuses = ['pending', 'active'];
+            const randomStatus = statuses[Math.floor(Math.random() * statuses.length)];
+            updateUserStatus(randomUser, randomStatus);
+        }, 10000); // A cada 10 segundos
+    </script>
+</body>
+</html>

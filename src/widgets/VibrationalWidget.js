@@ -521,17 +521,43 @@ class VibrationalWidget {
     }
 
     async sendToFirebase(data) {
-        if (!this.config.firebaseConfig) {
-            console.log('📤 Dados preparados para envio (Firebase não configurado):', data);
-            return;
-        }
-
         try {
-            // Aqui seria a implementação real do Firebase
             console.log('📤 Enviando dados para Firebase:', data);
-            // await firebase.firestore().collection('leituras_pendentes').add(data);
+            
+            // Enviar para Firebase real
+            if (window.firebase && window.firebase.database) {
+                const database = window.firebase.database();
+                const docRef = await database.ref('vibrational_readings').push({
+                    ...data,
+                    timestamp: window.firebase.database.ServerValue.TIMESTAMP,
+                    status: 'pending',
+                    approved: false,
+                    createdAt: new Date().toISOString()
+                });
+                
+                console.log('✅ Dados enviados para Firebase com ID:', docRef.key);
+                this.addLogEntry(`✅ Dados enviados para Firebase com ID: ${docRef.key}`);
+                this.updateStatus('success', 'Dados Enviados!');
+                
+                // Reset após envio
+                setTimeout(() => {
+                    this.resetWidget();
+                }, 3000);
+            } else {
+                // Fallback se Firebase não estiver disponível
+                console.log('📤 Dados preparados para envio (Firebase não disponível):', data);
+                this.addLogEntry('✅ Dados preparados para envio (modo offline)');
+                this.updateStatus('success', 'Dados Preparados!');
+                
+                setTimeout(() => {
+                    this.resetWidget();
+                }, 3000);
+            }
+            
         } catch (error) {
             console.error('❌ Erro ao enviar dados:', error);
+            this.addLogEntry(`❌ Erro ao enviar: ${error.message}`);
+            this.updateStatus('error', 'Erro no Envio');
         }
     }
 

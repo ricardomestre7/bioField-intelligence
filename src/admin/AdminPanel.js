@@ -476,15 +476,67 @@ class AdminPanel {
     }
 
     async loadPendingReadings() {
-        // Simulação de carregamento de dados pendentes
-        this.pendingReadings = this.generateMockPendingReadings();
-        this.renderPendingReadings();
+        try {
+            // Carregar dados reais do Firebase
+            if (window.firebase && window.firebase.database) {
+                const database = window.firebase.database();
+                const snapshot = await database.ref('vibrational_readings').once('value');
+                const readings = snapshot.val();
+                
+                if (readings) {
+                    this.pendingReadings = Object.entries(readings)
+                        .filter(([id, reading]) => !reading.approved || reading.status !== 'approved')
+                        .map(([id, reading]) => ({
+                            id: id,
+                            ...reading,
+                            timestamp: reading.createdAt || reading.timestamp
+                        }));
+                } else {
+                    this.pendingReadings = [];
+                }
+            } else {
+                // Fallback para dados mock se Firebase não estiver disponível
+                this.pendingReadings = this.generateMockPendingReadings();
+            }
+            
+            this.renderPendingReadings();
+        } catch (error) {
+            console.error('Erro ao carregar leituras pendentes:', error);
+            this.pendingReadings = this.generateMockPendingReadings();
+            this.renderPendingReadings();
+        }
     }
 
     async loadApprovedReadings() {
-        // Simulação de carregamento de dados aprovados
-        this.approvedReadings = this.generateMockApprovedReadings();
-        this.renderApprovedReadings();
+        try {
+            // Carregar dados reais do Firebase
+            if (window.firebase && window.firebase.database) {
+                const database = window.firebase.database();
+                const snapshot = await database.ref('vibrational_readings').once('value');
+                const readings = snapshot.val();
+                
+                if (readings) {
+                    this.approvedReadings = Object.entries(readings)
+                        .filter(([id, reading]) => reading.approved && reading.status === 'approved')
+                        .map(([id, reading]) => ({
+                            id: id,
+                            ...reading,
+                            timestamp: reading.createdAt || reading.timestamp
+                        }));
+                } else {
+                    this.approvedReadings = [];
+                }
+            } else {
+                // Fallback para dados mock se Firebase não estiver disponível
+                this.approvedReadings = this.generateMockApprovedReadings();
+            }
+            
+            this.renderApprovedReadings();
+        } catch (error) {
+            console.error('Erro ao carregar leituras aprovadas:', error);
+            this.approvedReadings = this.generateMockApprovedReadings();
+            this.renderApprovedReadings();
+        }
     }
 
     generateMockPendingReadings() {
@@ -556,25 +608,25 @@ class AdminPanel {
                 </div>
                 <div class="reading-metrics">
                     <div class="metric-item">
-                        <div class="metric-value">${reading.readings.length}</div>
-                        <div class="metric-label">Leituras</div>
+                        <div class="metric-value">${reading.bioIndex || '--'}</div>
+                        <div class="metric-label">Bio Index</div>
                     </div>
                     <div class="metric-item">
-                        <div class="metric-value">${Math.round(reading.readings.reduce((acc, r) => acc + r.atividade_vibracional, 0) / reading.readings.length)}%</div>
-                        <div class="metric-label">Atividade Média</div>
+                        <div class="metric-value">${reading.vibrationalCoherence || '--'}</div>
+                        <div class="metric-label">Coerência</div>
                     </div>
                     <div class="metric-item">
-                        <div class="metric-value">${Math.round(reading.readings.reduce((acc, r) => acc + r.coherence, 0) / reading.readings.length)}%</div>
-                        <div class="metric-label">Coerência Média</div>
+                        <div class="metric-value">${reading.infoQuality || '--'}</div>
+                        <div class="metric-label">Qualidade</div>
                     </div>
                     <div class="metric-item">
-                        <div class="metric-value">${reading.localidade}</div>
+                        <div class="metric-value">${reading.location ? `${reading.location.latitude?.toFixed(2)}, ${reading.location.longitude?.toFixed(2)}` : 'N/A'}</div>
                         <div class="metric-label">Localização</div>
                     </div>
                 </div>
                 <div class="reading-actions">
                     <button class="btn btn-primary" onclick="adminPanel.approveReading('${reading.id}')">Aprovar</button>
-                    <button class="btn btn-secondary" onclick="adminPanel.viewSpectrum('${reading.id}')">Ver Espectro</button>
+                    <button class="btn btn-secondary" onclick="adminPanel.viewSpectrum('${reading.id}')">Ver Detalhes</button>
                     <button class="btn btn-danger" onclick="adminPanel.rejectReading('${reading.id}')">Rejeitar</button>
                 </div>
             </div>
@@ -623,29 +675,64 @@ class AdminPanel {
     }
 
     async approveReading(readingId) {
-        const reading = this.pendingReadings.find(r => r.id === readingId);
-        if (!reading) return;
+        try {
+            const reading = this.pendingReadings.find(r => r.id === readingId);
+            if (!reading) return;
 
-        // Mover para aprovados
-        reading.approved_at = new Date().toISOString();
-        reading.approved_by = 'admin';
-        this.approvedReadings.push(reading);
-        this.pendingReadings = this.pendingReadings.filter(r => r.id !== readingId);
+            // Atualizar no Firebase
+            if (window.firebase && window.firebase.database) {
+                const database = window.firebase.database();
+                await database.ref(`vibrational_readings/${readingId}`).update({
+                    approved: true,
+                    status: 'approved',
+                    approved_at: new Date().toISOString(),
+                    approved_by: this.adminEmail || 'admin'
+                });
+            }
 
-        // Atualizar interface
-        this.renderPendingReadings();
-        this.renderApprovedReadings();
+            // Mover para aprovados localmente
+            reading.approved_at = new Date().toISOString();
+            reading.approved_by = this.adminEmail || 'admin';
+            reading.approved = true;
+            reading.status = 'approved';
+            this.approvedReadings.push(reading);
+            this.pendingReadings = this.pendingReadings.filter(r => r.id !== readingId);
 
-        console.log('✅ Leitura aprovada:', readingId);
-        alert('Leitura aprovada com sucesso!');
+            // Atualizar interface
+            this.renderPendingReadings();
+            this.renderApprovedReadings();
+
+            console.log('✅ Leitura aprovada:', readingId);
+            alert('Leitura aprovada com sucesso!');
+        } catch (error) {
+            console.error('Erro ao aprovar leitura:', error);
+            alert('Erro ao aprovar leitura. Tente novamente.');
+        }
     }
 
     async rejectReading(readingId) {
-        this.pendingReadings = this.pendingReadings.filter(r => r.id !== readingId);
-        this.renderPendingReadings();
-        
-        console.log('❌ Leitura rejeitada:', readingId);
-        alert('Leitura rejeitada!');
+        try {
+            // Atualizar no Firebase
+            if (window.firebase && window.firebase.database) {
+                const database = window.firebase.database();
+                await database.ref(`vibrational_readings/${readingId}`).update({
+                    approved: false,
+                    status: 'rejected',
+                    rejected_at: new Date().toISOString(),
+                    rejected_by: this.adminEmail || 'admin'
+                });
+            }
+
+            // Remover localmente
+            this.pendingReadings = this.pendingReadings.filter(r => r.id !== readingId);
+            this.renderPendingReadings();
+            
+            console.log('❌ Leitura rejeitada:', readingId);
+            alert('Leitura rejeitada!');
+        } catch (error) {
+            console.error('Erro ao rejeitar leitura:', error);
+            alert('Erro ao rejeitar leitura. Tente novamente.');
+        }
     }
 
     async approveAllReadings() {
