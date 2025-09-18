@@ -5,7 +5,7 @@
   "main": "index.html",
   "scripts": {
     "dev": "live-server --port=8000",
-    "build": "npm run optimize",
+    "build": "if not exist dist mkdir dist && npm run optimize",
     "optimize": "npm run copy-html && npm run minify-css && npm run minify-js && npm run copy-assets",
     "copy-html": "cp index.html dist/",
     "copy-assets": "cp manifest.json dist/ && cp sw.js dist/",
