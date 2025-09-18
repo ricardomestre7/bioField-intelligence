@@ -1,28 +1,5 @@
 {
   "version": 2,
-  "routes": [
-    {
-      "src": "/",
-      "dest": "/index.html"
-    },
-    {
-      "src": "/login.html",
-      "dest": "/index.html"
-    },
-    {
-      "src": "/pages/(.*)",
-      "dest": "/pages/$1"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "/$1"
-    }
-  ],
-  "functions": {
-    "pages/dashboard.html": {
-      "includeFiles": "**"
-    }
-  },
   "rewrites": [
     {
       "source": "/",
@@ -31,6 +8,10 @@
     {
       "source": "/login.html",
       "destination": "/index.html"
+    },
+    {
+      "source": "/pages/(.*)",
+      "destination": "/pages/$1"
     }
   ]
 }
