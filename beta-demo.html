@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BioField Intelligence - Módulo Beta</title>
+    <link rel="stylesheet" href="../styles.css">
+    <style>
+        .beta-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .beta-header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 30px;
+            background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+            border-radius: 15px;
+            border: 1px solid rgba(34, 197, 94, 0.3);
+        }
+
+        .beta-header h1 {
+            color: #22c55e;
+            margin-bottom: 10px;
+            font-size: 2.5rem;
+        }
+
+        .beta-header p {
+            color: #9ca3af;
+            font-size: 1.1rem;
+        }
+
+        .demo-sections {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .demo-section {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            border-radius: 15px;
+            padding: 25px;
+            border: 1px solid rgba(34, 197, 94, 0.2);
+        }
+
+        .demo-section h2 {
+            color: #22c55e;
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .feature-card {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px solid rgba(34, 197, 94, 0.2);
+        }
+
+        .feature-card h3 {
+            color: #22c55e;
+            margin-bottom: 10px;
+        }
+
+        .feature-card p {
+            color: #9ca3af;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-left: 10px;
+        }
+
+        .status-beta {
+            background: #f59e0b;
+            color: white;
+        }
+
+        .status-active {
+            background: #22c55e;
+            color: white;
+        }
+
+        .widget-info, .admin-info {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(34, 197, 94, 0.2);
+        }
+
+        .widget-info p, .admin-info p {
+            margin: 5px 0;
+            color: #9ca3af;
+        }
+
+        .admin-info ul {
+            margin: 10px 0;
+            padding-left: 20px;
+        }
+
+        .admin-info li {
+            color: #9ca3af;
+            font-size: 14px;
+            margin: 5px 0;
+        }
+
+        @media (max-width: 768px) {
+            .demo-sections {
+                grid-template-columns: 1fr;
+            }
+            
+            .beta-header h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="beta-container">
+        <div class="beta-header">
+            <h1>🌊 BioField Intelligence <span class="status-badge status-beta">BETA</span></h1>
+            <p>Módulo de Leitura Vibracional - Widget Embarcado e Painel de Controle</p>
+        </div>
+
+        <div class="demo-sections">
+            <!-- Widget de Leitura Vibracional -->
+            <div class="demo-section">
+                <h2>📱 Widget de Leitura Vibracional</h2>
+                <p>Interface para coleta de dados bioenergéticos em tempo real</p>
+                <div class="widget-info">
+                    <p><strong>Email Admin:</strong> institutodoreikiusui@gmail.com</p>
+                    <p><strong>Status:</strong> <span class="status-badge status-active">Ativo</span></p>
+                </div>
+                <div id="vibrational-widget-container"></div>
+            </div>
+
+            <!-- Painel de Administração -->
+            <div class="demo-section">
+                <h2>🔐 Painel de Administração</h2>
+                <p>Controle de autorização e geração de relatórios</p>
+                <div class="admin-info">
+                    <p><strong>Credenciais:</strong></p>
+                    <ul>
+                        <li>Email: institutodoreikiusui@gmail.com</li>
+                        <li>Senha: teste@123</li>
+                    </ul>
+                </div>
+                <div id="admin-panel-container"></div>
+            </div>
+        </div>
+
+        <!-- Características do Sistema -->
+        <div class="demo-section">
+            <h2>🚀 Características do Módulo Beta</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <h3>📊 Coleta de Dados</h3>
+                    <p>Widget embarcado coleta dados de atividade vibracional, coerência e espectros brutos em tempo real</p>
+                </div>
+                
+                <div class="feature-card">
+                    <h3>🔐 Controle de Acesso</h3>
+                    <p>Apenas administradores autorizados podem aprovar e gravar dados no banco de dados</p>
+                </div>
+                
+                <div class="feature-card">
+                    <h3>📋 Sistema de Consentimento</h3>
+                    <p>Clientes devem autorizar explicitamente o compartilhamento dos dados coletados</p>
+                </div>
+                
+                <div class="feature-card">
+                    <h3>📈 Relatórios de Espectros</h3>
+                    <p>Geração automática de relatórios com visualizações de espectros vibracionais</p>
+                </div>
+                
+                <div class="feature-card">
+                    <h3>🌐 Integração Firebase</h3>
+                    <p>Armazenamento seguro de dados brutos e aprovados no Firebase Firestore</p>
+                </div>
+                
+                <div class="feature-card">
+                    <h3>🛡️ Segurança Avançada</h3>
+                    <p>Regras de segurança Firebase garantem que apenas admins podem gravar dados</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Instruções de Uso -->
+        <div class="demo-section">
+            <h2>📖 Como Usar o Módulo Beta</h2>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;">
+                <div>
+                    <h4 style="color: #22c55e; margin-bottom: 10px;">1. Widget de Leitura</h4>
+                    <ul style="color: #9ca3af; font-size: 14px; line-height: 1.6;">
+                        <li>Clique em "Iniciar Leitura"</li>
+                        <li>Observe os dados sendo coletados</li>
+                        <li>Clique em "Autorizar Envio"</li>
+                        <li>Confirme o consentimento</li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 style="color: #22c55e; margin-bottom: 10px;">2. Painel Admin</h4>
+                    <ul style="color: #9ca3af; font-size: 14px; line-height: 1.6;">
+                        <li>Faça login (email: institutodoreikiusui@gmail.com)</li>
+                        <li>Senha: teste@123</li>
+                        <li>Visualize leituras pendentes</li>
+                        <li>Aprove ou rejeite leituras</li>
+                        <li>Gere relatórios de espectros</li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 style="color: #22c55e; margin-bottom: 10px;">3. Dados Coletados</h4>
+                    <ul style="color: #9ca3af; font-size: 14px; line-height: 1.6;">
+                        <li>ID do usuário e dispositivo</li>
+                        <li>Atividade vibracional (%)</li>
+                        <li>Coerência vibracional (%)</li>
+                        <li>Espectro bruto (100 pontos)</li>
+                        <li>Localização e timestamp</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="../src/widgets/VibrationalWidget.js"></script>
+    <script src="../src/admin/AdminPanel.js"></script>
+    <script>
+        // Inicializar o sistema Beta
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🌊 Inicializando BioField Intelligence - Módulo Beta');
+            
+            // Configuração Firebase
+            const firebaseConfig = {
+                apiKey: "AIzaSyBIYNOKU5rklEVYwU9Y2ZSdmKGz0w2aZ6c",
+                authDomain: "biofield-intelligence.firebaseapp.com",
+                databaseURL: "https://biofield-intelligence-default-rtdb.firebaseio.com",
+                projectId: "biofield-intelligence",
+                storageBucket: "biofield-intelligence.firebasestorage.app",
+                messagingSenderId: "506419866113",
+                appId: "1:506419866113:web:8aa79c9c1c74a5b6a7d832"
+            };
+
+            // Inicializar Widget Vibracional
+            const vibrationalWidget = new VibrationalWidget('vibrational-widget-container', {
+                firebaseConfig: firebaseConfig,
+                autoCollect: false,
+                collectionInterval: 3000
+            });
+
+            // Inicializar Painel de Admin
+            const adminPanel = new AdminPanel('admin-panel-container', firebaseConfig);
+
+            // Tornar disponível globalmente para debugging
+            window.vibrationalWidget = vibrationalWidget;
+            window.adminPanel = adminPanel;
+
+            console.log('✅ Módulo Beta inicializado com sucesso!');
+        });
+    </script>
+</body>
+</html>
