@@ -1,21 +1,3 @@
 {
-  "version": 2,
-  "rewrites": [
-    {
-      "source": "/",
-      "destination": "/index.html"
-    },
-    {
-      "source": "/pages/(.*)",
-      "destination": "/pages/$1"
-    },
-    {
-      "source": "/widget-sensor.html",
-      "destination": "/widget-sensor.html"
-    },
-    {
-      "source": "/teste-local.html",
-      "destination": "/teste-local.html"
-    }
-  ]
+  "version": 2
 }
