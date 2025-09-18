@@ -222,9 +222,34 @@ class BioFieldIntelligence {
 
         navLinks.forEach(link => {
             link.addEventListener('click', (e) => {
-                e.preventDefault();
-                const targetSection = link.getAttribute('href').substring(1);
-                this.switchSection(targetSection);
+                // Only prevent default for hash links, not for actual page navigation
+                if (link.getAttribute('href').startsWith('#')) {
+                    e.preventDefault();
+                    const targetSection = link.getAttribute('href').substring(1);
+                    this.switchSection(targetSection);
+                }
+                // For actual page links, let them navigate normally
+                console.log('🔗 Link clicado:', link.href);
+                console.log('🔗 Href attribute:', link.getAttribute('href'));
+                console.log('🔗 Starts with #:', link.getAttribute('href').startsWith('#'));
+                console.log('🔗 Default prevented:', e.defaultPrevented);
+                
+                // Verificar se é um link interno
+                if (link.href.includes('pages/') || link.href.includes('index.html')) {
+                    console.log('✅ Link interno detectado - permitindo navegação');
+                    // Não fazer preventDefault para links internos
+                    return true;
+                }
+                
+                // Verificar se é um link de teste
+                if (link.href.includes('teste') || link.href.includes('debug')) {
+                    console.log('🧪 Link de teste detectado - permitindo navegação');
+                    return true;
+                }
+                
+                // Para todos os outros links, permitir navegação normal
+                console.log('🌐 Link externo detectado - permitindo navegação');
+                return true;
             });
         });
     }

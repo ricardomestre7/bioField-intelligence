@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste Final - BioField Intelligence</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background: #f5f5f5;
+        }
+        .test-container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .nav-test {
+            display: flex;
+            gap: 10px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+        .nav-test a {
+            padding: 10px 20px;
+            background: #667eea;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background 0.3s;
+        }
+        .nav-test a:hover {
+            background: #5a67d8;
+        }
+        .status {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+        }
+        .success { background: #d4edda; color: #155724; }
+        .error { background: #f8d7da; color: #721c24; }
+        .warning { background: #fff3cd; color: #856404; }
+        .info { background: #d1ecf1; color: #0c5460; }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>🎯 Teste Final - BioField Intelligence</h1>
+        
+        <div class="status success">
+            ✅ Servidor local funcionando em http://localhost:8000
+        </div>
+        
+        <h2>🔗 Links de Navegação:</h2>
+        <div class="nav-test">
+            <a href="index.html">🏠 Login</a>
+            <a href="dashboard-teste.html">📊 Dashboard Teste</a>
+            <a href="pages/dashboard.html">📊 Dashboard Original</a>
+            <a href="pages/evaluation.html">📝 Avaliações</a>
+            <a href="pages/reports.html">📈 Relatórios</a>
+            <a href="pages/organization.html">🏢 Organização</a>
+            <a href="pages/settings.html">⚙️ Configurações</a>
+        </div>
+        
+        <h2>🧪 Teste de JavaScript:</h2>
+        <button onclick="testNavigation()">Testar Navegação</button>
+        <button onclick="testAuth()">Testar Autenticação</button>
+        <button onclick="clearLog()">Limpar Log</button>
+        
+        <h2>📋 Log de Eventos:</h2>
+        <div id="log" style="background: #f8f9fa; border: 1px solid #dee2e6; border-radius: 5px; padding: 15px; margin: 15px 0; font-family: monospace; font-size: 12px; max-height: 300px; overflow-y: auto;">
+            <div>🔍 Aguardando testes...</div>
+        </div>
+        
+        <h2>📊 Status dos Arquivos:</h2>
+        <div id="file-status">
+            <p>Verificando arquivos...</p>
+        </div>
+    </div>
+
+    <script>
+        function log(message) {
+            const logDiv = document.getElementById('log');
+            const timestamp = new Date().toLocaleTimeString();
+            logDiv.innerHTML += `<div>[${timestamp}] ${message}</div>`;
+            logDiv.scrollTop = logDiv.scrollHeight;
+        }
+        
+        function clearLog() {
+            document.getElementById('log').innerHTML = '<div>🔍 Log limpo...</div>';
+        }
+        
+        function testNavigation() {
+            log('🧪 Testando navegação...');
+            
+            const links = document.querySelectorAll('.nav-test a');
+            log(`📊 Links encontrados: ${links.length}`);
+            
+            links.forEach((link, index) => {
+                log(`🔗 Link ${index + 1}: ${link.href} - ${link.textContent}`);
+                
+                // Testar se o link funciona
+                link.addEventListener('click', function(e) {
+                    log(`🖱️ Clique no link: ${this.href}`);
+                    log(`📍 Texto: ${this.textContent}`);
+                    log(`🎯 Target: ${e.target.tagName}`);
+                    log(`🎯 Default prevented: ${e.defaultPrevented}`);
+                    
+                    // Verificar se é um link interno
+                    if (this.href.includes('pages/') || this.href.includes('index.html') || this.href.includes('dashboard-teste.html')) {
+                        log('✅ Link interno detectado - permitindo navegação');
+                        return true;
+                    }
+                });
+            });
+            
+            log('✅ Teste de navegação concluído');
+        }
+        
+        function testAuth() {
+            log('🔐 Testando autenticação...');
+            
+            // Verificar se há dados de autenticação
+            const isAuthenticated = localStorage.getItem('biofield_authenticated') === 'true';
+            const user = localStorage.getItem('biofield_user');
+            
+            log(`🔑 Autenticado: ${isAuthenticated}`);
+            log(`👤 Usuário: ${user ? JSON.parse(user).email : 'Nenhum'}`);
+            
+            if (isAuthenticated) {
+                log('✅ Usuário autenticado - pode acessar páginas protegidas');
+            } else {
+                log('⚠️ Usuário não autenticado - será redirecionado para login');
+            }
+        }
+        
+        // Verificar status dos arquivos
+        document.addEventListener('DOMContentLoaded', function() {
+            log('🚀 Teste final iniciado');
+            
+            const files = [
+                'index.html',
+                'dashboard-teste.html',
+                'pages/dashboard.html',
+                'pages/evaluation.html',
+                'pages/reports.html',
+                'pages/organization.html',
+                'pages/settings.html'
+            ];
+            
+            const statusDiv = document.getElementById('file-status');
+            let statusHTML = '';
+            
+            files.forEach(file => {
+                statusHTML += `<p>📄 ${file}: <span id="status-${file.replace(/[^a-zA-Z0-9]/g, '')}">Verificando...</span></p>`;
+            });
+            
+            statusDiv.innerHTML = statusHTML;
+            
+            // Testar cada arquivo
+            files.forEach(file => {
+                fetch(file)
+                    .then(response => {
+                        const statusId = `status-${file.replace(/[^a-zA-Z0-9]/g, '')}`;
+                        const statusEl = document.getElementById(statusId);
+                        if (response.ok) {
+                            statusEl.innerHTML = '✅ Disponível';
+                            statusEl.style.color = 'green';
+                            log(`✅ ${file} - Disponível`);
+                        } else {
+                            statusEl.innerHTML = '❌ Erro ' + response.status;
+                            statusEl.style.color = 'red';
+                            log(`❌ ${file} - Erro ${response.status}`);
+                        }
+                    })
+                    .catch(error => {
+                        const statusId = `status-${file.replace(/[^a-zA-Z0-9]/g, '')}`;
+                        const statusEl = document.getElementById(statusId);
+                        statusEl.innerHTML = '❌ Erro: ' + error.message;
+                        statusEl.style.color = 'red';
+                        log(`❌ ${file} - Erro: ${error.message}`);
+                    });
+            });
+            
+            // Testar autenticação automaticamente
+            setTimeout(() => {
+                testAuth();
+            }, 1000);
+        });
+        
+        // Interceptar todos os cliques
+        document.addEventListener('click', function(e) {
+            if (e.target.tagName === 'A') {
+                log(`🎯 Clique interceptado: ${e.target.href}`);
+                log(`🎯 Target: ${e.target.tagName}`);
+                log(`🎯 Default prevented: ${e.defaultPrevented}`);
+            }
+        });
+    </script>
+</body>
+</html>

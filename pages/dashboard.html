@@ -31,6 +31,9 @@
                 <a href="settings.html" class="nav-link">
                     <i class="fas fa-cog"></i> Configurações
                 </a>
+                <button id="logoutBtn" class="nav-link logout-btn" style="background: none; border: none; color: #e74c3c; cursor: pointer;">
+                    <i class="fas fa-sign-out-alt"></i> SAIR (ADMIN)
+                </button>
             </nav>
         </header>
 
@@ -151,5 +154,23 @@
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
     
     <script src="dashboard-firebase.js"></script>
+    <script>
+        // Verificar autenticação ao carregar a página
+        document.addEventListener('DOMContentLoaded', function() {
+            if (!authManager.isAuthenticated()) {
+                window.location.href = '../index.html';
+                return;
+            }
+            
+            // Configurar logout
+            const logoutBtn = document.getElementById('logoutBtn');
+            if (logoutBtn) {
+                logoutBtn.addEventListener('click', function() {
+                    authManager.logout();
+                    window.location.href = '../index.html';
+                });
+            }
+        });
+    </script>
 </body>
 </html>

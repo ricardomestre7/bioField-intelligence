@@ -22,6 +22,9 @@
                 <a href="reports.html" class="nav-link">Relatórios</a>
                 <a href="organization.html" class="nav-link">Organização</a>
                 <a href="settings.html" class="nav-link">Configurações</a>
+                <button id="logoutBtn" class="nav-link logout-btn" style="background: none; border: none; color: #e74c3c; cursor: pointer;">
+                    <i class="fas fa-sign-out-alt"></i> SAIR (ADMIN)
+                </button>
             </nav>
             <div class="user-profile">
                 <i class="fas fa-user-circle"></i>
@@ -139,6 +142,21 @@
                     window.bioFieldManager.loadEvaluations();
                 }
             }, 100);
+            
+            // Verificar autenticação ao carregar a página
+            if (!authManager.isAuthenticated()) {
+                window.location.href = '../index.html';
+                return;
+            }
+            
+            // Configurar logout
+            const logoutBtn = document.getElementById('logoutBtn');
+            if (logoutBtn) {
+                logoutBtn.addEventListener('click', function() {
+                    authManager.logout();
+                    window.location.href = '../index.html';
+                });
+            }
         });
     </script>
 </body>

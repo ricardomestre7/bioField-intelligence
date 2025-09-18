@@ -5,11 +5,17 @@ class AuthManager {
     }
 
     init() {
-        // Verificar autenticação ao carregar a página
-        this.checkAuth();
-        
-        // Adicionar listener para logout
-        this.setupLogoutListeners();
+        // Aguardar o DOM carregar antes de verificar autenticação
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', () => {
+                this.checkAuth();
+                this.setupLogoutListeners();
+            });
+        } else {
+            // DOM já carregado
+            this.checkAuth();
+            this.setupLogoutListeners();
+        }
     }
 
     // Verificar se o usuário está autenticado
@@ -26,20 +32,41 @@ class AuthManager {
     // Verificar autenticação e redirecionar se necessário
     checkAuth() {
         const currentPage = window.location.pathname;
-        const isLoginPage = currentPage.includes('login.html');
+        const isLoginPage = currentPage.includes('login.html') || currentPage === '/' || currentPage === '/index.html';
+        const isInPagesFolder = currentPage.includes('/pages/');
+        
+        console.log('🔐 Verificando autenticação:', {
+            currentPage,
+            isLoginPage,
+            isInPagesFolder,
+            isAuthenticated: this.isAuthenticated()
+        });
+        
+        // Não redirecionar automaticamente para páginas de teste
+        if (currentPage.includes('teste') || currentPage.includes('debug')) {
+            console.log('🧪 Página de teste detectada - pulando verificação de autenticação');
+            return true;
+        }
         
         if (!this.isAuthenticated() && !isLoginPage) {
             // Se não autenticado e não está na página de login, redirecionar
-            window.location.href = '../login.html';
+            console.log('❌ Não autenticado, redirecionando para login');
+            if (isInPagesFolder) {
+                window.location.href = '../index.html';
+            } else {
+                window.location.href = 'index.html';
+            }
             return false;
         }
         
         if (this.isAuthenticated() && isLoginPage) {
             // Se autenticado e está na página de login, redirecionar para dashboard
+            console.log('✅ Autenticado, redirecionando para dashboard');
             window.location.href = 'pages/dashboard.html';
             return false;
         }
         
+        console.log('✅ Autenticação OK');
         return true;
     }
 
@@ -76,7 +103,7 @@ class AuthManager {
     logout() {
         localStorage.removeItem('biofield_authenticated');
         localStorage.removeItem('biofield_user');
-        window.location.href = '../login.html';
+        window.location.href = '../index.html';
     }
 
     // Configurar listeners para botões de logout

@@ -83,7 +83,7 @@ function updateLiveStats() {
         
         if (bioIndexes.length > 0) {
             const avgBioIndex = bioIndexes.reduce((a, b) => a + b, 0) / bioIndexes.length;
-            document.getElementById('avgBioIndex').textContent = avgBioIndex.toFixed(1);
+            document.getElementById('avgBioIndex').textContent = parseFloat(avgBioIndex).toFixed(1);
         }
     }
 }
@@ -120,8 +120,8 @@ function updateKPIs() {
         const avgBioIndex = totalBioIndex / validSensors;
         const avgCoherence = totalCoherence / validSensors;
         
-        document.getElementById('bioIndexValue').textContent = avgBioIndex.toFixed(1);
-        document.getElementById('coherenceValue').textContent = avgCoherence.toFixed(1);
+        document.getElementById('bioIndexValue').textContent = parseFloat(avgBioIndex).toFixed(1);
+        document.getElementById('coherenceValue').textContent = parseFloat(avgCoherence).toFixed(1);
         
         // Encontrar qualidade mais comum
         const mostCommonQuality = Object.keys(qualityCounts).reduce((a, b) => 
@@ -168,11 +168,11 @@ function renderSensors() {
                 </div>
                 <div class="sensor-metrics" style="display: flex; gap: 20px;">
                     <div class="metric" style="text-align: center;">
-                        <div class="metric-value" style="font-size: 1.2rem; font-weight: bold; color: #667eea;">${(data.bioIndex || data.temperatura || 0).toFixed(1)}</div>
+                        <div class="metric-value" style="font-size: 1.2rem; font-weight: bold; color: #667eea;">${parseFloat(data.bioIndex || data.temperatura || 0).toFixed(1)}</div>
                         <div class="metric-label" style="font-size: 0.8rem; color: #666;">Bio Index</div>
                     </div>
                     <div class="metric" style="text-align: center;">
-                        <div class="metric-value" style="font-size: 1.2rem; font-weight: bold; color: #667eea;">${(data.coherence || data.audio_level || 0).toFixed(1)}</div>
+                        <div class="metric-value" style="font-size: 1.2rem; font-weight: bold; color: #667eea;">${parseFloat(data.coherence || data.audio_level || 0).toFixed(1)}</div>
                         <div class="metric-label" style="font-size: 0.8rem; color: #666;">Coerência</div>
                     </div>
                     <div class="metric" style="text-align: center;">
@@ -251,7 +251,7 @@ try {
                         quality: reading.infoQuality,
                         noise: reading.emNoise,
                         localizacao: reading.location?.latitude ? 
-                            `${reading.location.latitude.toFixed(4)}, ${reading.location.longitude.toFixed(4)}` : 
+                            `${parseFloat(reading.location.latitude).toFixed(4)}, ${parseFloat(reading.location.longitude).toFixed(4)}` : 
                             'Localização não disponível'
                     };
                 }
@@ -272,5 +272,34 @@ try {
 }
 
 // Log inicial
-addLog('🚀 Dashboard BioField Intelligence iniciado', 'info');
-addLog('📡 Aguardando dados dos sensores...', 'info');
+// Inicializar dashboard quando DOM estiver carregado
+document.addEventListener('DOMContentLoaded', function() {
+    addLog('🚀 Dashboard BioField Intelligence iniciado', 'info');
+    addLog('📡 Aguardando dados dos sensores...', 'info');
+    
+    // Inicializar componentes do dashboard
+    updateLiveStats();
+    updateKPIs();
+    renderSensors();
+    
+    // Simular alguns dados iniciais para demonstração
+    setTimeout(() => {
+        // Simular dados de sensores
+        sensorsData = {
+            sensor1: { bioIndex: 75.5, coherence: 82.3, location: { latitude: -23.5505, longitude: -46.6333 } },
+            sensor2: { bioIndex: 68.2, coherence: 79.1, location: { latitude: -23.5489, longitude: -46.6388 } },
+            sensor3: { bioIndex: 71.8, coherence: 85.7, location: { latitude: -23.5520, longitude: -46.6311 } }
+        };
+        
+        updateCount = 3;
+        lastUpdateTime = new Date();
+        
+        // Atualizar interface
+        updateLiveStats();
+        updateKPIs();
+        renderSensors();
+        
+        addLog('✅ Dados de demonstração carregados', 'success');
+        updateFirebaseStatus('Conectado - Modo Demo', 'success');
+    }, 2000);
+});

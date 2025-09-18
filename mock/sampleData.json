@@ -1,0 +1,82 @@
+{
+  "metrics_summary": {
+    "average_bio_index": 71.5,
+    "average_coherence": 64.8,
+    "total_locations": 4,
+    "optimized_locations": 2,
+    "locations_needing_attention": 1,
+    "last_update": "2024-01-15T10:30:00Z"
+  },
+  "locations": [
+    {
+      "id": "sala_principal",
+      "name": "Sala Principal",
+      "bio_index": 78.2,
+      "coherence": 72.1,
+      "quality": "Excelente",
+      "status": "Otimizado",
+      "temperature": 22.5,
+      "humidity": 45,
+      "em_noise": 12.3
+    },
+    {
+      "id": "escritorio",
+      "name": "Escritório",
+      "bio_index": 69.8,
+      "coherence": 61.5,
+      "quality": "Bom",
+      "status": "Otimizado",
+      "temperature": 23.1,
+      "humidity": 48,
+      "em_noise": 15.7
+    },
+    {
+      "id": "sala_reunioes",
+      "name": "Sala de Reuniões",
+      "bio_index": 65.3,
+      "coherence": 58.9,
+      "quality": "Regular",
+      "status": "Monitorando",
+      "temperature": 24.2,
+      "humidity": 52,
+      "em_noise": 18.4
+    },
+    {
+      "id": "sala_tecnica",
+      "name": "Sala Técnica",
+      "bio_index": 52.7,
+      "coherence": 46.7,
+      "quality": "Baixo",
+      "status": "Necessita Atenção",
+      "temperature": 26.8,
+      "humidity": 58,
+      "em_noise": 28.9
+    }
+  ],
+  "historical_data": {
+    "bio_index_evolution": [
+      {"date": "2024-01-08", "value": 68.2},
+      {"date": "2024-01-09", "value": 69.1},
+      {"date": "2024-01-10", "value": 70.3},
+      {"date": "2024-01-11", "value": 69.8},
+      {"date": "2024-01-12", "value": 71.2},
+      {"date": "2024-01-13", "value": 70.9},
+      {"date": "2024-01-14", "value": 71.5}
+    ],
+    "coherence_data": [
+      {"location": "Sala Principal", "value": 72.1},
+      {"location": "Escritório", "value": 61.5},
+      {"location": "Sala de Reuniões", "value": 58.9},
+      {"location": "Sala Técnica", "value": 46.7}
+    ]
+  },
+  "alerts": [
+    {
+      "id": "alert_001",
+      "type": "warning",
+      "location": "Sala Técnica",
+      "message": "Índice bioenergético abaixo do ideal",
+      "timestamp": "2024-01-15T09:45:00Z"
+    }
+  ]
+}

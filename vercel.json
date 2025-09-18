@@ -2,8 +2,12 @@
   "version": 2,
   "routes": [
     {
+      "src": "/",
+      "dest": "/index.html"
+    },
+    {
       "src": "/login.html",
-      "dest": "/login.html"
+      "dest": "/index.html"
     },
     {
       "src": "/pages/(.*)",
@@ -18,5 +22,15 @@
     "pages/dashboard.html": {
       "includeFiles": "**"
     }
-  }
+  },
+  "rewrites": [
+    {
+      "source": "/",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/login.html",
+      "destination": "/index.html"
+    }
+  ]
 }
